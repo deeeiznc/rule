@@ -1,14 +1,5 @@
 function operator(proxies = [], targetPlatform, context) {
-  const {
-    $arguments,
-    $options,
-    $substore,
-    scriptResourceCache,
-    ProxyUtils,
-    flowUtils,
-  } = context;
-
-  const provider = $arguments ?? 'Provider';
+  const provider = $arguments.provider ?? 'Provider';
 
   // Define a mapping of country abbreviations to full country names
   const countryMapping = {
