@@ -1,4 +1,6 @@
 function operator(proxies = [], targetPlatform, context) {
+  const cacheEnabled = $arguments.cache
+  const cache = scriptResourceCache
   const provider = $arguments.provider ?? 'Provider';
 
   // Define a mapping of country abbreviations to full country names
