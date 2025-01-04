@@ -1,5 +1,5 @@
 function operator(proxies = [], targetPlatform, context) {
-  const provider = $arguments[0] ?? 'YourProvider';
+  const provider = $arguments[0] ?? 'Provider';
 
   // Define a mapping of country abbreviations to full country names
   const countryMapping = {
@@ -290,7 +290,7 @@ function operator(proxies = [], targetPlatform, context) {
       if (countryAbbrev in countryMapping) {
         countryName = countryMapping[countryAbbrev];
         // Replace the first word with "$Provider's full country name"
-        firstWord = `${provider}'s ${countryName}`;
+        firstWord = `${provider} ${countryName}`;
         words[0] = firstWord;
       }
     }
