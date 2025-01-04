@@ -1,4 +1,4 @@
-function operator(proxies = [], targetPlatform, context) {
+async function operator(proxies = [], targetPlatform, context) {
   const cacheEnabled = $arguments.cache
   const cache = scriptResourceCache
   const provider = $arguments.provider ?? 'Provider';
