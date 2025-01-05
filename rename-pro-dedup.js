@@ -7,10 +7,11 @@ async function operator(proxies = [], targetPlatform, context) {
 
   const countryCodeToName = {
     HK: "Hong Kong",
+    US: "United States",
+    JP: "Japan",
     SG: "Singapore",
     TW: "Taiwan",
-    JP: "Japan",
-    US: "United States",
+    MO: "Macao",
     KR: "South Korea",
     DE: "Germany",
     TR: "Türkiye",
