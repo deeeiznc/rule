@@ -2,82 +2,81 @@ const provider = $arguments.provider ?? "Provider";
 
 const segmenter = new Intl.Segmenter(undefined, { granularity: "word" });
 
-const countryCodeToName = {
-  HK: "Hong Kong",
-  US: "United States",
-  JP: "Japan",
-  SG: "Singapore",
-  TW: "Taiwan",
-  MO: "Macao",
-  KR: "South Korea",
-  DE: "Germany",
-  TR: "Türkiye",
-  MY: "Malaysia",
-  AU: "Australia",
-  UK: "United Kingdom",
-  CA: "Canada",
-  MX: "Mexico",
-  BR: "Brazil",
-  CL: "Chile",
-  AR: "Argentina",
-  CO: "Colombia",
-  PE: "Peru",
-  BO: "Bolivia",
-  FR: "France",
-  NL: "Netherlands",
-  ES: "Spain",
-  IE: "Ireland",
-  IT: "Italia",
-  LU: "Luxembourg",
-  CH: "Switzerland",
-  DK: "Denmark",
-  FI: "Finland",
-  SE: "Sweden",
-  NO: "Norway",
-  AT: "Austria",
-  CZ: "Czech",
-  IS: "Iceland",
-  BE: "Belgium",
-  PT: "Portugal",
-  PL: "Poland",
-  EE: "Estonia",
-  HU: "Hungary",
-  RU: "Russia",
-  UA: "Ukraine",
-  MD: "Moldova",
-  RO: "Romania",
-  BG: "Bulgaria",
-  RS: "Serbia",
-  GR: "Greece",
-  IL: "Israel",
-  IQ: "Iraq",
-  TG: "Togo",
-  EG: "Egypt",
-  JO: "Jordan",
-  TN: "Tunisia",
-  AE: "Dubai",
-  SA: "Saudi Arabia",
-  UZ: "Uzbekistan",
-  PK: "Pakistan",
-  KZ: "Kazakhstan",
-  NG: "Nigeria",
-  AO: "Angola",
-  ZA: "South Africa",
-  AQ: "Antarctica",
-  IN: "India",
-  ID: "Indonesia",
-  PH: "Philippines",
-  MO: "Macao",
-  TH: "Thailand",
-  VN: "Vietnam",
-  KH: "Cambodia",
-  BD: "Bangladesh",
-  NP: "Nepal",
-  MN: "Mongolia",
-  NZ: "New Zealand",
+const countryData = {
+  "🇭🇰": { name: "Hong Kong", abbr: "HK" },
+  "🇺🇸": { name: "United States", abbr: "US" },
+  "🇯🇵": { name: "Japan", abbr: "JP" },
+  "🇸🇬": { name: "Singapore", abbr: "SG" },
+  "🇹🇼": { name: "Taiwan", abbr: "TW" }, "🇨🇳": { name: "Taiwan", abbr: "TW" },
+  "🇰🇷": { name: "South Korea", abbr: "KR" },
+  "🇩🇪": { name: "Germany", abbr: "DE" },
+  "🇹🇷": { name: "Türkiye", abbr: "TR" },
+  "🇲🇾": { name: "Malaysia", abbr: "MY" },
+  "🇦🇺": { name: "Australia", abbr: "AU" },
+  "🇬🇧": { name: "United Kingdom", abbr: "UK" },
+  "🇨🇦": { name: "Canada", abbr: "CA" },
+  "🇲🇽": { name: "Mexico", abbr: "MX" },
+  "🇧🇷": { name: "Brazil", abbr: "BR" },
+  "🇨🇱": { name: "Chile", abbr: "CL" },
+  "🇦🇷": { name: "Argentina", abbr: "AR" },
+  "🇨🇴": { name: "Colombia", abbr: "CO" },
+  "🇵🇪": { name: "Peru", abbr: "PE" },
+  "🇧🇴": { name: "Bolivia", abbr: "BO" },
+  "🇫🇷": { name: "France", abbr: "FR" },
+  "🇳🇱": { name: "Netherlands", abbr: "NL" },
+  "🇪🇸": { name: "Spain", abbr: "ES" },
+  "🇮🇪": { name: "Ireland", abbr: "IE" },
+  "🇮🇹": { name: "Italia", abbr: "IT" },
+  "🇱🇺": { name: "Luxembourg", abbr: "LU" },
+  "🇨🇭": { name: "Switzerland", abbr: "CH" },
+  "🇩🇰": { name: "Denmark", abbr: "DK" },
+  "🇫🇮": { name: "Finland", abbr: "FI" },
+  "🇸🇪": { name: "Sweden", abbr: "SE" },
+  "🇳🇴": { name: "Norway", abbr: "NO" },
+  "🇦🇹": { name: "Austria", abbr: "AT" },
+  "🇨🇿": { name: "Czech", abbr: "CZ" },
+  "🇮🇸": { name: "Iceland", abbr: "IS" },
+  "🇧🇪": { name: "Belgium", abbr: "BE" },
+  "🇵🇹": { name: "Portugal", abbr: "PT" },
+  "🇵🇱": { name: "Poland", abbr: "PL" },
+  "🇪🇪": { name: "Estonia", abbr: "EE" },
+  "🇭🇺": { name: "Hungary", abbr: "HU" },
+  "🇷🇺": { name: "Russia", abbr: "RU" },
+  "🇺🇦": { name: "Ukraine", abbr: "UA" },
+  "🇲🇩": { name: "Moldova", abbr: "MD" },
+  "🇷🇴": { name: "Romania", abbr: "RO" },
+  "🇧🇬": { name: "Bulgaria", abbr: "BG" },
+  "🇷🇸": { name: "Serbia", abbr: "RS" },
+  "🇬🇷": { name: "Greece", abbr: "GR" },
+  "🇮🇱": { name: "Israel", abbr: "IL" },
+  "🇮🇶": { name: "Iraq", abbr: "IQ" },
+  "🇹🇬": { name: "Togo", abbr: "TG" },
+  "🇪🇬": { name: "Egypt", abbr: "EG" },
+  "🇯🇴": { name: "Jordan", abbr: "JO" },
+  "🇹🇳": { name: "Tunisia", abbr: "TN" },
+  "🇦🇪": { name: "Dubai", abbr: "AE" },
+  "🇸🇦": { name: "Saudi Arabia", abbr: "SA" },
+  "🇺🇿": { name: "Uzbekistan", abbr: "UZ" },
+  "🇵🇰": { name: "Pakistan", abbr: "PK" },
+  "🇰🇿": { name: "Kazakhstan", abbr: "KZ" },
+  "🇳🇬": { name: "Nigeria", abbr: "NG" },
+  "🇦🇴": { name: "Angola", abbr: "AO" },
+  "🇿🇦": { name: "South Africa", abbr: "ZA" },
+  "🇦🇶": { name: "Antarctica", abbr: "AQ" },
+  "🇮🇳": { name: "India", abbr: "IN" },
+  "🇮🇩": { name: "Indonesia", abbr: "ID" },
+  "🇵🇭": { name: "Philippines", abbr: "PH" },
+  "🇲🇴": { name: "Macao", abbr: "MO" },
+  "🇹🇭": { name: "Thailand", abbr: "TH" },
+  "🇻🇳": { name: "Vietnam", abbr: "VN" },
+  "🇰🇭": { name: "Cambodia", abbr: "KH" },
+  "🇧🇩": { name: "Bangladesh", abbr: "BD" },
+  "🇳🇵": { name: "Nepal", abbr: "NP" },
+  "🇲🇳": { name: "Mongolia", abbr: "MN" },
+  "🇳🇿": { name: "New Zealand", abbr: "NZ" },
 };
 
-const name = $server.name
+const name = $server.name;
 const flag = name.match(/^[\u{1F1E6}-\u{1F1FF}]{2}/u);
 const flagStr = flag ? flag[0] : "";
 const cleanedName = flag ? name.replace(flagStr, "").trim() : name;
@@ -90,7 +89,23 @@ for (const segment of segments) {
   }
 }
 
-const processedWords = [`${provider} ${countryCodeToName[words[0].substring(0, 2)]}`];
+let countryName = "";
+if (flagStr && countryData[flagStr]) {
+  // Search by flag first
+  countryName = countryData[flagStr].name;
+} else if (words.length > 0) {
+  // If no match by flag, then search by abbr
+  const abbr = words[0].substring(0, 2).toUpperCase();
+  // Look for the abbr in the countryData values
+  for (const flag in countryData) {
+    if (countryData[flag].abbr === abbr) {
+      countryName = countryData[flag].name;
+      break; // Stop searching once a match is found
+    }
+  }
+}
+
+const processedWords = [`${provider} ${countryName}`];
 
 for (let i = 1; i < words.length; i++) {
   const word = words[i].replace(/ˣ/g, "");
