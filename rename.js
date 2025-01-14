@@ -276,7 +276,11 @@ function operator(pro) {
         "泰": "泰国",
         "法": "法国"
       };
-      findKeyValue = shortMap[e.name.match(/[澳德港日新坡美台韩俄泰法]/)[0]];
+      // findKeyValue = shortMap[e.name.match(/[澳德港日新坡美台韩俄泰法]/)[0]];
+      const matchShort = e.name.match(/[澳德港日新坡美台韩俄泰法]/);
+      if (matchShort) {
+        findKeyValue = shortMap[matchShort[0]];
+      }
     }
     if (findKeyValue) {
       let keyover = [],
