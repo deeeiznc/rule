@@ -249,11 +249,15 @@ function operator(pro) {
     }
 
     !GetK && ObjKA(Allmap)
+    // 匹配 Allkey 地区
+    let findKeyValue;
     const findKey = AMK.find(([key]) => e.name.includes(key));
-    if (!findKey) {
+    if (findKey?.[1]) {
+      findKeyValue = findKey[1];
+    } else {
       const match = e.name.match(/[澳德港日新坡美台韩俄泰法]/);
       if (match) {
-        const findKeyValue = {
+        findKeyValue = {
           "澳": "澳大利亚",
           "德": "德国",
           "港": "香港",
@@ -268,11 +272,11 @@ function operator(pro) {
           "法": "法国"
         }[match[0]];
       }
-    } else {
-      const findKeyValue = findKey[1];
     }
+
     let firstName = "",
       nNames = "";
+
     if (nf) {
       firstName = FNAME;
     } else {
