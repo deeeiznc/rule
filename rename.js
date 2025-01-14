@@ -1,6 +1,43 @@
-const inArg = $arguments; // console.log(inArg)
+/**
+ * 更新日期：2024-04-05 15:30:15
+ * 用法：Sub-Store 脚本操作添加
+ * rename.js 以下是此脚本支持的参数，必须以 # 为开头多个参数使用"&"连接，参考上述地址为例使用参数。 禁用缓存url#noCache
+ *
+ *** 主要参数
+ * [in=] 自动判断机场节点名类型 优先级 zh(中文) -> flag(国旗) -> quan(英文全称) -> en(英文简写)
+ * 如果不准的情况, 可以加参数指定:
+ *
+ * [nm]    保留没有匹配到的节点
+ * [in=zh] 或in=cn识别中文
+ * [in=en] 或in=us 识别英文缩写
+ * [in=flag] 或in=gq 识别国旗 如果加参数 in=flag 则识别国旗 脚本操作前面不要添加国旗操作 否则移除国旗后面脚本识别不到
+ * [in=quan] 识别英文全称
 
-// 一些原有参数
+ *
+ * [out=]   输出节点名可选参数: (cn或zh ，us或en ，gq或flag ，quan) 对应：(中文，英文缩写 ，国旗 ，英文全称) 默认中文 例如 [out=en] 或 out=us 输出英文缩写
+ *** 分隔符参数
+ *
+ * [fgf=]   节点名前缀或国旗分隔符，默认为空格；
+ * [sn=]    设置国家与序号之间的分隔符，默认为空格；
+ *
+ *** 前缀参数
+ * [name=]  节点添加机场名称前缀；
+ * [nf]     把 name= 的前缀值放在最前面
+ *** 保留参数
+ * [blkey=iplc+gpt+NF+IPLC] 用+号添加多个关键词 保留节点名的自定义字段 需要区分大小写!
+ * 如果需要修改 保留的关键词 替换成别的 可以用 > 分割 例如 [#blkey=GPT>新名字+其他关键词] 这将把【GPT】替换成【新名字】
+ * 例如      https://raw.githubusercontent.com/Keywos/rule/main/rename.js#flag&blkey=GPT>新名字+NF
+ * [blgd]   保留: 家宽 IPLC ˣ² 等
+ * [bl]     正则匹配保留 [0.1x, x0.2, 6x ,3倍]等标识
+ * [nx]     保留1倍率与不显示倍率的
+ * [blnx]   只保留高倍率
+ * [clear]  清理乱名
+ * [blpx]   如果用了上面的bl参数,对保留标识后的名称分组排序,如果没用上面的bl参数单独使用blpx则不起任何作用
+ * [blockquic] blockquic=on 阻止; blockquic=off 不阻止
+ */
+
+// const inArg = {'blkey':'iplc+GPT>GPTnewName+NF+IPLC', 'flag':true };
+const inArg = $arguments; // console.log(inArg)
 const nx = inArg.nx || false,
   bl = inArg.bl || false,
   nf = inArg.nf || false,
@@ -8,13 +45,14 @@ const nx = inArg.nx || false,
   blgd = inArg.blgd || false,
   blpx = inArg.blpx || false,
   blnx = inArg.blnx || false,
+  // numone = inArg.one || false, // 去除此行
   debug = inArg.debug || false,
   clear = inArg.clear || false,
   addflag = inArg.flag || false,
   nm = inArg.nm || false;
 
 const FGF = inArg.fgf == undefined ? " " : decodeURI(inArg.fgf),
-  XHFGF = inArg.sn == undefined ? " " : decodeURI(inArg.sn),
+  // XHFGF = inArg.sn == undefined ? " " : decodeURI(inArg.sn), // 去除此行
   FNAME = inArg.name == undefined ? "" : decodeURI(inArg.name),
   BLKEY = inArg.blkey == undefined ? "" : decodeURI(inArg.blkey),
   blockquic = inArg.blockquic == undefined ? "" : decodeURI(inArg.blockquic),
@@ -98,19 +136,6 @@ function ObjKA(i) {
   AMK = Object.entries(i)
 }
 
-let GetK = false, AMK = [];
-function ObjKA(i) {
-  GetK = true;
-  AMK = Object.entries(i);
-}
-
-// === 去除了 jxh() 调用及同名节点编号功能 ===
-// 原先的 jxh() 函数也可一并删除
-// function jxh(...) { ... } // 已删除
-
-// === 去除了 oneP() 及相关调用 ===
-// function oneP(...) { ... } // 已删除
-
 function operator(pro) {
   const Allmap = {};
   const outList = getList(outputName);
@@ -128,11 +153,9 @@ function operator(pro) {
     });
   });
 
-  // 一些清理逻辑
   if (clear || nx || blnx || key) {
     pro = pro.filter((res) => {
       const resname = res.name;
-      // 保留条件
       const shouldKeep =
         !(clear && nameclear.test(resname)) &&
         !(nx && namenx.test(resname)) &&
@@ -142,36 +165,39 @@ function operator(pro) {
     });
   }
 
-  // 保留关键字相关
   const BLKEYS = BLKEY ? BLKEY.split("+") : "";
 
   pro.forEach((e) => {
-    let bktf = false, originalName = e.name;
-
-    // 替换 rurekey 里的关键词
+    let bktf = false, ens = e.name
+    // 预处理 防止预判或遗漏
     Object.keys(rurekey).forEach((ikey) => {
       if (rurekey[ikey].test(e.name)) {
         e.name = e.name.replace(rurekey[ikey], ikey);
         if (BLKEY) {
-          bktf = true;
+          bktf = true
           let BLKEY_REPLACE = "",
             re = false;
           BLKEYS.forEach((i) => {
-            if (i.includes(">") && originalName.includes(i.split(">")[0])) {
+            if (i.includes(">") && ens.includes(i.split(">")[0])) {
+              if (rurekey[ikey].test(i.split(">")[0])) {
+                e.name += " " + i.split(">")[0]
+              }
               if (i.split(">")[1]) {
                 BLKEY_REPLACE = i.split(">")[1];
                 re = true;
               }
+            } else {
+              if (ens.includes(i)) {
+                e.name += " " + i
+              }
             }
+            retainKey = re
+              ? BLKEY_REPLACE
+              : BLKEYS.filter((items) => e.name.includes(items));
           });
-          retainKey = re
-            ? BLKEY_REPLACE
-            : BLKEYS.filter((items) => e.name.includes(items));
         }
       }
     });
-
-    // block-quic 设置
     if (blockquic == "on") {
       e["block-quic"] = "on";
     } else if (blockquic == "off") {
@@ -180,7 +206,7 @@ function operator(pro) {
       delete e["block-quic"];
     }
 
-    // 若上面没有匹配到 rurekey，但依旧可能要匹配 BLKEY
+    // 自定义
     if (!bktf && BLKEY) {
       let BLKEY_REPLACE = "",
         re = false;
@@ -197,9 +223,9 @@ function operator(pro) {
         : BLKEYS.filter((items) => e.name.includes(items));
     }
 
-    // 匹配保留的特殊标识
     let ikey = "",
       ikeys = "";
+    // 保留固定格式 倍率
     if (blgd) {
       regexArray.forEach((regex, index) => {
         if (regex.test(e.name)) {
@@ -207,6 +233,8 @@ function operator(pro) {
         }
       });
     }
+
+    // 正则 匹配倍率
     if (bl) {
       const match = e.name.match(
         /((倍率|X|x|×)\D?((\d{1,3}\.)?\d+)\D?)|((\d{1,3}\.)?\d+)(倍|X|x|×)/
@@ -214,43 +242,41 @@ function operator(pro) {
       if (match) {
         const rev = match[0].match(/(\d[\d.]*)/)[0];
         if (rev !== "1") {
-          ikey = rev + "×";
+          const newValue = rev + "×";
+          ikey = newValue;
         }
       }
     }
 
-    // 准备做地区替换
-    !GetK && ObjKA(Allmap);
+    !GetK && ObjKA(Allmap)
     const findKey = AMK.find(([key]) => e.name.includes(key));
-
+    if (!findKey) {
+      const match = e.name.match(/[澳德港日新坡美台韩俄泰法]/);
+      if (match) {
+        const findKeyValue = {
+          "澳": "澳大利亚",
+          "德": "德国",
+          "港": "香港",
+          "日": "日本",
+          "新": "新加坡",
+          "坡": "新加坡",
+          "美": "美国",
+          "台": "台湾",
+          "韩": "韩国",
+          "俄": "俄罗斯",
+          "泰": "泰国",
+          "法": "法国"
+        }[match[0]];
+      }
+    } else {
+      const findKeyValue = findKey[1];
+    }
     let firstName = "",
       nNames = "";
     if (nf) {
       firstName = FNAME;
     } else {
       nNames = FNAME;
-    }
-    if (findKey?.[1]) {
-      findKeyValue = findKey[1];
-    } else {
-      const map = {
-        "澳": "澳大利亚",
-        "德": "德国",
-        "港": "香港",
-        "日": "日本",
-        "新": "新加坡",
-        "坡": "新加坡",
-        "美": "美国",
-        "台": "台湾",
-        "韩": "韩国",
-        "俄": "俄罗斯",
-        "泰": "泰国",
-        "法": "法国",
-      };
-      const match = e.name.match(/[澳德港日新坡美台韩俄泰法]/);
-      if (match) {
-        findKeyValue = map[match[0]];
-      }
     }
     if (findKeyValue) {
       let keyover = [],
@@ -273,53 +299,14 @@ function operator(pro) {
         e.name = null;
       }
     }
-  }
   });
-
-// 删除了 jxh(pro) 调用，不再给同名节点编号
-// 删除了 numone && oneP(pro) 调用
-// 仅保留原有按正则排序的部分
-blpx && (pro = fampx(pro));
-key && (pro = pro.filter((e) => !keyb.test(e.name)));
-
-// 去除可能为 null 的节点
-pro = pro.filter((e) => e.name !== null);
-return pro;
+  pro = pro.filter((e) => e.name !== null);
+  blpx && (pro = fampx(pro));
+  key && (pro = pro.filter((e) => !keyb.test(e.name)));
+  return pro;
 }
 
-// 原有函数保留
-function getList(arg) {
-  switch (arg) {
-    case "us":
-      return EN;
-    case "gq":
-      return FG;
-    case "quan":
-      return QC;
-    default:
-      return ZH;
-  }
-}
-
-// 保留原先的 fampx 排序逻辑
-function fampx(pro) {
-  const wis = [];
-  const wnout = [];
-  for (const proxy of pro) {
-    const fan = specialRegex.some((regex) => regex.test(proxy.name));
-    if (fan) {
-      wis.push(proxy);
-    } else {
-      wnout.push(proxy);
-    }
-  }
-  const sps = wis.map((proxy) =>
-    specialRegex.findIndex((regex) => regex.test(proxy.name))
-  );
-  wis.sort(
-    (a, b) =>
-      sps[wis.indexOf(a)] - sps[wis.indexOf(b)] || a.name.localeCompare(b.name)
-  );
-  wnout.sort((a, b) => pro.indexOf(a) - pro.indexOf(b));
-  return wnout.concat(wis);
-}
+// prettier-ignore
+function getList(arg) { switch (arg) { case 'us': return EN; case 'gq': return FG; case 'quan': return QC; default: return ZH; } }
+// prettier-ignore
+function fampx(pro) { const wis = []; const wnout = []; for (const proxy of pro) { const fan = specialRegex.some((regex) => regex.test(proxy.name)); if (fan) { wis.push(proxy); } else { wnout.push(proxy); } } const sps = wis.map((proxy) => specialRegex.findIndex((regex) => regex.test(proxy.name))); wis.sort((a, b) => sps[wis.indexOf(a)] - sps[wis.indexOf(b)] || a.name.localeCompare(b.name)); wnout.sort((a, b) => pro.indexOf(a) - pro.indexOf(b)); return wnout.concat(wis); }
