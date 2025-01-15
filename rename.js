@@ -295,7 +295,7 @@ function operator(pro) {
           "坡": "Singapore",
           "美": "United States",
           "台": "Taiwan",
-          "韩": "Korea",
+          "韩": "NorthKorea",
           "俄": "Russia",
           "泰": "Thailand",
           "法": "France"
