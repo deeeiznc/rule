@@ -288,17 +288,17 @@ function operator(pro) {
       const match = e.name.match(/[澳德港日新坡美台韩俄泰法]/);
       if (match) {
         const findKeyValue = {
-          "澳": "澳大利亚",
-          "德": "德国",
-          "港": "香港",
-          "日": "日本",
-          "坡": "新加坡",
-          "美": "美国",
-          "台": "台湾",
-          "韩": "韩国",
-          "俄": "俄罗斯",
-          "泰": "泰国",
-          "法": "法国"
+          "澳": "Australia",
+          "德": "Germany",
+          "港": "Hong Kong",
+          "日": "Japan",
+          "坡": "Singapore",
+          "美": "United States",
+          "台": "Taiwan",
+          "韩": "Korea",
+          "俄": "Russia",
+          "泰": "Thailand",
+          "法": "France"
         }[match[0]];
         let keyover = [],
           usflag = "";
