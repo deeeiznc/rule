@@ -314,12 +314,7 @@ function operator(pro) {
           .filter((k) => k !== "");
         e.name = keyover.join(FGF);
       } else {
-        // 没匹配到地区
-        if (nm) {
-          // 如果指定 nm 参数，就保留原名并添加前缀
-          e.name = FNAME + FGF + e.name;
-        } else {
-          // 否则丢弃
+        if (!nm) {
           e.name = null;
         }
       }
