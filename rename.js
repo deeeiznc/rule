@@ -12,12 +12,8 @@
  * [in=flag] 或in=gq 识别国旗 如果加参数 in=flag 则识别国旗 脚本操作前面不要添加国旗操作 否则移除国旗后面脚本识别不到
  * [in=quan] 识别英文全称
 
- *
  * [out=]   输出节点名可选参数: (cn或zh ，us或en ，gq或flag ，quan) 对应：(中文，英文缩写 ，国旗 ，英文全称) 默认中文 例如 [out=en] 或 out=us 输出英文缩写
- *** 分隔符参数
- *
  * [fgf=]   节点名前缀或国旗分隔符，默认为空格；
- * 序号参数
  * [flag]   给节点前面加国旗
  *
  *** 前缀参数
@@ -278,7 +274,7 @@ function operator(pro) {
       const match = e.name.match(/[澳德港日新坡美台韩俄泰法]/);
       if (match) {
         const findKeyValue = {
-          "澳": "AU", "德": "DE", "港": "HK", "日": "JP", "坡": "SG","美": "US", "台": "TW", "韩": "KR", "俄": "RU", "泰": "TH", "法": "FR"
+          "澳": "AU", "德": "DE", "港": "HK", "日": "JP", "坡": "SG", "美": "US", "台": "TW", "韩": "KR", "俄": "RU", "泰": "TH", "法": "FR"
         }[match[0]];
 
         let usflag = "";
