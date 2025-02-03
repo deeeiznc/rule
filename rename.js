@@ -103,10 +103,10 @@ function operator(pro) {
     }
     const [firstName, nNames] = nf ? [FNAME, ""] : ["", FNAME],
       findKey = AMK.find(([k]) => e.name.includes(k));
-    const keyVal = findKey?.[1] ? findKey[1] : (e.name.match(/[澳德港日新坡美台韩俄泰法]/) ? { "澳": "AU", "德": "DE", "港": "HK", "日": "JP", "坡": "SG", "美": "US", "台": "TW", "韩": "KR", "俄": "RU", "泰": "TH", "法": "FR" }[e.name.match(/[澳德港日新坡美台韩俄泰法]/)[0]] : null);
+    const keyVal = findKey?.[1] || ((m = e.name.match(/[澳德港日新坡美台韩俄泰法]/)) ? { "澳": "AU", "德": "DE", "港": "HK", "日": "JP", "坡": "SG", "美": "US", "台": "TW", "韩": "KR", "俄": "RU", "泰": "TH", "法": "FR" }[m[0]] : null);
     if (keyVal) {
-      const idx = outList.indexOf(keyVal),
-        e.name = [firstName, addflag && idx !== -1 ? (FG[idx] === "🇹🇼" ? "🇨🇳" : FG[idx]) : "", nNames, keyVal, retainKey, ikey, ikeys].filter(Boolean).join(FGF);
+      const idx = outList.indexOf(keyVal);
+      e.name = [firstName, addflag && idx !== -1 ? (FG[idx] === "🇹🇼" ? "🇨🇳" : FG[idx]) : "", nNames, keyVal, retainKey, ikey, ikeys].filter(Boolean).join(FGF);
     } else e.name = nm ? FNAME + FGF + e.name : null;
   }
   pro = pro.filter(e => e.name);
