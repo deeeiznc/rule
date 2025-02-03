@@ -138,19 +138,16 @@ function operator(pro) {
     }
   }
   pro = pro.filter(e => e.name);
-  if (blpx) pro = fampx(pro);
-  if (key) pro = pro.filter(e => !keyb.test(e.name));
+  if (blpx) {
+    const wis = [], wnout = [];
+    for (const p of pro) (specialRegex.some(r => r.test(p.name)) ? wis : wnout).push(p);
+    const sps = wis.map(p => specialRegex.findIndex(r => r.test(p.name)));
+    wis.sort((a, b) => sps[wis.indexOf(a)] - sps[wis.indexOf(b)] || a.name.localeCompare(b.name));
+    wnout.sort((a, b) => pro.indexOf(a) - pro.indexOf(b));
+    pro = wnout.concat(wis);
+  }
+  if (key) return pro.filter(e => !keyb.test(e.name));
   return pro;
 }
 
 function getList(arg) { return arg === 'us' ? EN : arg === 'gq' ? FG : arg === 'quan' ? QC : ZH; }
-
-function fampx(pro) {
-  const wis = [], wnout = [];
-  for (const p of pro)
-    (specialRegex.some(r => r.test(p.name)) ? wis : wnout).push(p);
-  const sps = wis.map(p => specialRegex.findIndex(r => r.test(p.name)));
-  wis.sort((a, b) => sps[wis.indexOf(a)] - sps[wis.indexOf(b)] || a.name.localeCompare(b.name));
-  wnout.sort((a, b) => pro.indexOf(a) - pro.indexOf(b));
-  return wnout.concat(wis);
-}
