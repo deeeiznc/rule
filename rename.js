@@ -70,23 +70,23 @@ const FGF = inArg.fgf == undefined ? " " : decodeURI(inArg.fgf),
   inname = nameMap[inArg.in] || "",
   outputName = nameMap[inArg.out] || "";
 // prettier-ignore
-const FG = ['🇭🇰', '🇲🇴', '🇹🇼', '🇯🇵', '🇰🇷', '🇸🇬', '🇺🇸', '🇬🇧', '🇫🇷', '🇩🇪', '🇦🇺']l; // Omitted
+const FG = ['🇭🇰','🇲🇴','🇹🇼','🇯🇵','🇰🇷','🇸🇬','🇺🇸','🇬🇧','🇫🇷','🇩🇪','🇦🇺']l; Omitted
 // prettier-ignore
-const EN = ['HK', 'MO', 'TW', 'JP', 'KR', 'SG', 'US', 'GB', 'FR', 'DE', 'AU'];
+const EN = ['HK','MO','TW','JP','KR','SG','US','GB','FR','DE','AU'];
 // prettier-ignore
-const ZH = ['香港', '澳门', '台湾', '日本', '韩国', '新加坡', '美国', '英国', '法国', '德国', '澳大利亚'];
+const ZH = ['香港','澳门','台湾','日本','韩国','新加坡','美国','英国','法国','德国','澳大利亚'];
 // prettier-ignore
-const QC = ['Hong Kong', 'Macao', 'Taiwan', 'Japan', 'Korea', 'Singapore', 'United States', 'United Kingdom', 'France', 'Germany', 'Australia'];
+const QC = ['Hong Kong','Macao','Taiwan','Japan','Korea','Singapore','United States','United Kingdom','France','Germany','Australia'];
 const specialRegex = [
   /(\d\.)?\d+×/,
   /IPLC|IEPL|Kern|Edge|Pro|Std|Exp|Biz|Fam|Game|Buy|Zx|LB|Game/,
 ];
 const nameclear =
-  /(套餐|到期|有效|剩余|版本|已用|过期|失联|测试|官方|网址|备用|群|TEST|客服|网站|获取|订阅|流量|机场|下次|官址|联系|邮箱|工单|学术|文档|USE|USED|TOTAL|EXPIRE|EMAIL|TRAFFIC)/i;
+  /(套餐|到期|有效|剩余|版本|已用|过期|失联|测试|官方|网址|备用|群|TEST|客服|网站|获取|订阅|流量|机场|下次|官址|联系|邮箱|工单|学术|USE|USED|TOTAL|EXPIRE|EMAIL)/i;
 // prettier-ignore
-const regexArray = [/ˣ²/, /ˣ³/, /ˣ⁴/, /ˣ⁵/, /ˣ⁶/, /ˣ⁷/, /ˣ⁸/, /ˣ⁹/, /ˣ¹⁰/, /ˣ²⁰/, /ˣ³⁰/, /ˣ⁴⁰/, /ˣ⁵⁰/, /IPLC/i, /IEPL/i, /核心/, /边缘/, /高级/, /标准/, /实验/, /商宽/, /家宽/, /游戏|game/i, /购物/, /专线/, /LB/, /cloudflare/i, /\budp\b/i, /\bgpt\b/i, /udpn\b/];
+const regexArray=[/ˣ²/, /ˣ³/, /ˣ⁴/, /ˣ⁵/, /ˣ⁶/, /ˣ⁷/, /ˣ⁸/, /ˣ⁹/, /ˣ¹⁰/, /ˣ²⁰/, /ˣ³⁰/, /ˣ⁴⁰/, /ˣ⁵⁰/, /IPLC/i, /IEPL/i, /核心/, /边缘/, /高级/, /标准/, /实验/, /商宽/, /家宽/, /游戏|game/i, /购物/, /专线/, /LB/, /cloudflare/i, /\budp\b/i, /\bgpt\b/i,/udpn\b/];
 // prettier-ignore
-const valueArray = ["2×", "3×", "4×", "5×", "6×", "7×", "8×", "9×", "10×", "20×", "30×", "40×", "50×", "IPLC", "IEPL", "Kern", "Edge", "Pro", "Std", "Exp", "Biz", "Fam", "Game", "Buy", "Zx", "LB", "CF", "UDP", "GPT", "UDPN"];
+const valueArray= [ "2×","3×","4×","5×","6×","7×","8×","9×","10×","20×","30×","40×","50×","IPLC","IEPL","Kern","Edge","Pro","Std","Exp","Biz","Fam","Game","Buy","Zx","LB","CF","UDP","GPT","UDPN"];
 const nameblnx = /(高倍|(?!1)2+(x|倍)|ˣ²|ˣ³|ˣ⁴|ˣ⁵|ˣ¹⁰)/i;
 const namenx = /(高倍|(?!1)(0\.|\d)+(x|倍)|ˣ²|ˣ³|ˣ⁴|ˣ⁵|ˣ¹⁰)/i;
 const keya =
@@ -174,29 +174,28 @@ function operator(pro) {
     Object.keys(rurekey).forEach((ikey) => {
       if (rurekey[ikey].test(e.name)) {
         e.name = e.name.replace(rurekey[ikey], ikey);
-        if (BLKEY) {
-          bktf = true
-          let BLKEY_REPLACE = "",
-            re = false;
-          BLKEYS.forEach((i) => {
-            if (i.includes(">") && ens.includes(i.split(">")[0])) {
-              if (rurekey[ikey].test(i.split(">")[0])) {
-                e.name += " " + i.split(">")[0]
-              }
-              if (i.split(">")[1]) {
-                BLKEY_REPLACE = i.split(">")[1];
-                re = true;
-              }
-            } else {
-              if (ens.includes(i)) {
-                e.name += " " + i
-              }
+      if (BLKEY) {
+        bktf = true
+        let BLKEY_REPLACE = "",
+        re = false;
+      BLKEYS.forEach((i) => {
+        if (i.includes(">") && ens.includes(i.split(">")[0])) {
+          if (rurekey[ikey].test(i.split(">")[0])) {
+              e.name += " " + i.split(">")[0]
             }
-            retainKey = re
-              ? BLKEY_REPLACE
-              : BLKEYS.filter((items) => e.name.includes(items));
-          });
+          if (i.split(">")[1]) {
+            BLKEY_REPLACE = i.split(">")[1];
+            re = true;
+          }
+        } else {
+          if (ens.includes(i)) {
+             e.name += " " + i
+            }
         }
+        retainKey = re
+        ? BLKEY_REPLACE
+        : BLKEYS.filter((items) => e.name.includes(items));
+      });}
       }
     });
     if (blockquic == "on") {
@@ -254,7 +253,7 @@ function operator(pro) {
     const findKey = AMK.find(([key]) =>
       e.name.includes(key)
     )
-
+    
     let firstName = "",
       nNames = "";
 
@@ -279,40 +278,26 @@ function operator(pro) {
         .filter((k) => k !== "");
       e.name = keyover.join(FGF);
     } else {
-      // 新增备用查找逻辑
-      const match = e.name.match(/[澳德港日新坡美台韩俄泰法]/);
-      if (match) {
-        const findKeyValue = {
-          "澳": "AU", "德": "DE", "港": "HK", "日": "JP", "坡": "SG", "美": "US", "台": "TW", "韩": "KR", "俄": "RU", "泰": "TH", "法": "FR"
-        }[match[0]];
-
-        let usflag = "";
-        if (addflag) {
-          const index = outList.indexOf(findKeyValue);
-          usflag = index !== -1 ?
-            (FG[index] === "🇹🇼" ? "🇨🇳" : FG[index]) : "";
-        }
-        const keyParts = [firstName, usflag, nNames, findKeyValue, retainKey, ikey, ikeys].filter(Boolean);
-        e.name = keyParts.join(FGF);
-      } else if (nm) {
+      if (nm) {
         e.name = FNAME + FGF + e.name;
       } else {
         e.name = null;
       }
     }
-    pro = pro.filter((e) => e.name !== null);
-    jxh(pro);
-    numone && oneP(pro);
-    blpx && (pro = fampx(pro));
-    key && (pro = pro.filter((e) => !keyb.test(e.name)));
-    return pro;
-  }
+  });
+  pro = pro.filter((e) => e.name !== null);
+  jxh(pro);
+  numone && oneP(pro);
+  blpx && (pro = fampx(pro));
+  key && (pro = pro.filter((e) => !keyb.test(e.name)));
+  return pro;
+}
 
 // prettier-ignore
-function getList(arg) { switch (arg) { case 'us': return EN; case 'gq': return FG; case 'quan': return QC; default: return ZH; } }
+function getList(arg) { switch (arg) { case 'us': return EN; case 'gq': return FG; case 'quan': return QC; default: return ZH; }}
 // prettier-ignore
-function jxh(e) { const n = e.reduce((e, n) => { const t = e.find((e) => e.name === n.name); if (t) { t.count++; t.items.push({ ...n, name: `${n.name}${XHFGF}${t.count.toString().padStart(2, "0")}`, }); } else { e.push({ name: n.name, count: 1, items: [{ ...n, name: `${n.name}${XHFGF}01` }], }); } return e; }, []); const t = (typeof Array.prototype.flatMap === 'function' ? n.flatMap((e) => e.items) : n.reduce((acc, e) => acc.concat(e.items), [])); e.splice(0, e.length, ...t); return e; }
+function jxh(e) { const n = e.reduce((e, n) => { const t = e.find((e) => e.name === n.name); if (t) { t.count++; t.items.push({ ...n, name: `${n.name}${XHFGF}${t.count.toString().padStart(2, "0")}`, }); } else { e.push({ name: n.name, count: 1, items: [{ ...n, name: `${n.name}${XHFGF}01` }], }); } return e; }, []);const t=(typeof Array.prototype.flatMap==='function'?n.flatMap((e) => e.items):n.reduce((acc, e) => acc.concat(e.items),[])); e.splice(0, e.length, ...t); return e;}
 // prettier-ignore
-function oneP(e) { const t = e.reduce((e, t) => { const n = t.name.replace(/[^A-Za-z0-9\u00C0-\u017F\u4E00-\u9FFF]+\d+$/, ""); if (!e[n]) { e[n] = []; } e[n].push(t); return e; }, {}); for (const e in t) { if (t[e].length === 1 && t[e][0].name.endsWith("01")) {/* const n = t[e][0]; n.name = e;*/ t[e][0].name = t[e][0].name.replace(/[^.]01/, "") } } return e; }
+function oneP(e) { const t = e.reduce((e, t) => { const n = t.name.replace(/[^A-Za-z0-9\u00C0-\u017F\u4E00-\u9FFF]+\d+$/, ""); if (!e[n]) { e[n] = []; } e[n].push(t); return e; }, {}); for (const e in t) { if (t[e].length === 1 && t[e][0].name.endsWith("01")) {/* const n = t[e][0]; n.name = e;*/ t[e][0].name= t[e][0].name.replace(/[^.]01/, "") } } return e; }
 // prettier-ignore
-function fampx(pro) { const wis = []; const wnout = []; for (const proxy of pro) { const fan = specialRegex.some((regex) => regex.test(proxy.name)); if (fan) { wis.push(proxy); } else { wnout.push(proxy); } } const sps = wis.map((proxy) => specialRegex.findIndex((regex) => regex.test(proxy.name))); wis.sort((a, b) => sps[wis.indexOf(a)] - sps[wis.indexOf(b)] || a.name.localeCompare(b.name)); wnout.sort((a, b) => pro.indexOf(a) - pro.indexOf(b)); return wnout.concat(wis); }
+function fampx(pro) { const wis = []; const wnout = []; for (const proxy of pro) { const fan = specialRegex.some((regex) => regex.test(proxy.name)); if (fan) { wis.push(proxy); } else { wnout.push(proxy); } } const sps = wis.map((proxy) => specialRegex.findIndex((regex) => regex.test(proxy.name)) ); wis.sort( (a, b) => sps[wis.indexOf(a)] - sps[wis.indexOf(b)] || a.name.localeCompare(b.name) ); wnout.sort((a, b) => pro.indexOf(a) - pro.indexOf(b)); return wnout.concat(wis);}
