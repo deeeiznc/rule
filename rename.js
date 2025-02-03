@@ -128,6 +128,7 @@ const rurekey = {
   G: /\d\s?GB/gi,
   Esnc: /esnc/gi
 };
+const match = e.name.match(/[澳德港日新坡美台韩俄泰法]/);
 
 let GetK = false, AMK = []
 function ObjKA(i) {
@@ -284,40 +285,35 @@ function operator(pro) {
         .concat(firstName, usflag, nNames, findKeyValue, retainKey, ikey, ikeys)
         .filter((k) => k !== "");
       e.name = keyover.join(FGF);
-    } else {
-      const match = e.name.match(/[澳德港日新坡美台韩俄泰法]/);
-      if (match) {
-        const findKeyValue = {
-          "澳": "Australia",
-          "德": "Germany",
-          "港": "Hong Kong",
-          "日": "Japan",
-          "坡": "Singapore",
-          "美": "United States",
-          "台": "Taiwan",
-          "韩": "NorthKorea",
-          "俄": "Russia",
-          "泰": "Thailand",
-          "法": "France"
-        }[match[0]];
-        let keyover = [],
-          usflag = "";
-        if (addflag) {
-          const index = outList.indexOf(findKeyValue);
-          if (index !== -1) {
-            usflag = FG[index];
-            usflag = usflag === "🇹🇼" ? "🇨🇳" : usflag;
-          }
-        }
-        keyover = keyover
-          .concat(firstName, usflag, nNames, findKeyValue, retainKey, ikey, ikeys)
-          .filter((k) => k !== "");
-        e.name = keyover.join(FGF);
-      } else {
-        if (!nm) {
-          e.name = null;
+    } else if (match) {
+      const findKeyValue = {
+        "澳": "AU",
+        "德": "DE",
+        "港": "HK",
+        "日": "JP",
+        "坡": "SG",
+        "美": "US",
+        "台": "TW",
+        "韩": "KR",
+        "俄": "RU",
+        "泰": "TH",
+        "法": "FR"
+      }[match[0]];
+      let keyover = [],
+        usflag = "";
+      if (addflag) {
+        const index = outList.indexOf(findKeyValue);
+        if (index !== -1) {
+          usflag = FG[index];
+          usflag = usflag === "🇹🇼" ? "🇨🇳" : usflag;
         }
       }
+      keyover = keyover
+        .concat(firstName, usflag, nNames, findKeyValue, retainKey, ikey, ikeys)
+        .filter((k) => k !== "");
+      e.name = keyover.join(FGF);
+    } else if (!nm) {
+      e.name = null;
     }
   });
 
