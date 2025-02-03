@@ -284,7 +284,8 @@ function operator(pro) {
       const match = e.name.match(/[澳德港日新坡美台韩俄泰法]/);
       if (match) {
         const findKeyValue = {
-          "澳": "AU", "德": "DE", "港": "HK", "日": "JP", "坡": "SG", "美": "US", "台": "TW", "韩": "KR", "俄": "RU", "泰": "TH", "法": "FR"
+          "澳": "AU", "德": "DE", "港": "HK", "日": "JP", "坡": "SG",
+          "美": "US", "台": "TW", "韩": "KR", "俄": "RU", "泰": "TH", "法": "FR"
         }[match[0]];
 
         let usflag = "";
@@ -301,13 +302,14 @@ function operator(pro) {
         e.name = null;
       }
     }
-    pro = pro.filter((e) => e.name !== null);
-    jxh(pro);
-    numone && oneP(pro);
-    blpx && (pro = fampx(pro));
-    key && (pro = pro.filter((e) => !keyb.test(e.name)));
-    return pro;
-  }
+  });
+  pro = pro.filter((e) => e.name !== null);
+  jxh(pro);
+  numone && oneP(pro);
+  blpx && (pro = fampx(pro));
+  key && (pro = pro.filter((e) => !keyb.test(e.name)));
+  return pro;
+}
 
 // prettier-ignore
 function getList(arg) { switch (arg) { case 'us': return EN; case 'gq': return FG; case 'quan': return QC; default: return ZH; } }
