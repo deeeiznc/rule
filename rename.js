@@ -275,12 +275,10 @@ function operator(pro) {
         .filter((k) => k !== "");
       e.name = keyover.join(FGF);
     } else {
-      // 新增备用查找逻辑
       const match = e.name.match(/[澳德港日新坡美台韩俄泰法]/);
       if (match) {
         const findKeyValue = {
-          "澳": "AU", "德": "DE", "港": "HK", "日": "JP", "坡": "SG",
-          "美": "US", "台": "TW", "韩": "KR", "俄": "RU", "泰": "TH", "法": "FR"
+          "澳": "AU", "德": "DE", "港": "HK", "日": "JP", "坡": "SG", "美": "US", "台": "TW", "韩": "KR", "俄": "RU", "泰": "TH", "法": "FR"
         }[match[0]];
 
         let usflag = "";
