@@ -146,8 +146,7 @@ function operator(pro) {
     wnout.sort((a, b) => pro.indexOf(a) - pro.indexOf(b));
     pro = wnout.concat(wis);
   }
-  if (key) return pro.filter(e => !keyb.test(e.name));
-  return pro;
+  return key ? pro.filter(e => !keyb.test(e.name)) : pro;
 }
 
 function getList(arg) { return arg === 'us' ? EN : arg === 'gq' ? FG : arg === 'quan' ? QC : ZH; }
