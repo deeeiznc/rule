@@ -1,94 +1,91 @@
-const provider = $arguments.provider ?? "Provider";
-const out = $arguments.out ?? "abr";
-const countryData = {
-  "🇭🇰": { name: "Hong Kong", abbr: "HK" },
-  "🇺🇸": { name: "United States", abbr: "US" },
-  "🇯🇵": { name: "Japan", abbr: "JP" },
-  "🇸🇬": { name: "Singapore", abbr: "SG" },
-  "🇹🇼": { name: "Taiwan", abbr: "TW" }, "🇨🇳": { name: "Taiwan", abbr: "TW" },
-  "🇰🇷": { name: "South Korea", abbr: "KR" },
-  "🇩🇪": { name: "Germany", abbr: "DE" },
-  "🇹🇷": { name: "Türkiye", abbr: "TR" },
-  "🇲🇾": { name: "Malaysia", abbr: "MY" },
-  "🇦🇺": { name: "Australia", abbr: "AU" },
-  "🇬🇧": { name: "United Kingdom", abbr: "UK" },
-  "🇨🇦": { name: "Canada", abbr: "CA" },
-  "🇲🇽": { name: "Mexico", abbr: "MX" },
-  "🇧🇷": { name: "Brazil", abbr: "BR" },
-  "🇨🇱": { name: "Chile", abbr: "CL" },
-  "🇦🇷": { name: "Argentina", abbr: "AR" },
-  "🇨🇴": { name: "Colombia", abbr: "CO" },
-  "🇵🇪": { name: "Peru", abbr: "PE" },
-  "🇧🇴": { name: "Bolivia", abbr: "BO" },
-  "🇫🇷": { name: "France", abbr: "FR" },
-  "🇳🇱": { name: "Netherlands", abbr: "NL" },
-  "🇪🇸": { name: "Spain", abbr: "ES" },
-  "🇮🇪": { name: "Ireland", abbr: "IE" },
-  "🇮🇹": { name: "Italia", abbr: "IT" },
-  "🇱🇺": { name: "Luxembourg", abbr: "LU" },
-  "🇨🇭": { name: "Switzerland", abbr: "CH" },
-  "🇩🇰": { name: "Denmark", abbr: "DK" },
-  "🇫🇮": { name: "Finland", abbr: "FI" },
-  "🇸🇪": { name: "Sweden", abbr: "SE" },
-  "🇳🇴": { name: "Norway", abbr: "NO" },
-  "🇦🇹": { name: "Austria", abbr: "AT" },
-  "🇨🇿": { name: "Czech", abbr: "CZ" },
-  "🇮🇸": { name: "Iceland", abbr: "IS" },
-  "🇧🇪": { name: "Belgium", abbr: "BE" },
-  "🇵🇹": { name: "Portugal", abbr: "PT" },
-  "🇵🇱": { name: "Poland", abbr: "PL" },
-  "🇪🇪": { name: "Estonia", abbr: "EE" },
-  "🇭🇺": { name: "Hungary", abbr: "HU" },
-  "🇷🇺": { name: "Russia", abbr: "RU" },
-  "🇺🇦": { name: "Ukraine", abbr: "UA" },
-  "🇲🇩": { name: "Moldova", abbr: "MD" },
-  "🇷🇴": { name: "Romania", abbr: "RO" },
-  "🇧🇬": { name: "Bulgaria", abbr: "BG" },
-  "🇷🇸": { name: "Serbia", abbr: "RS" },
-  "🇬🇷": { name: "Greece", abbr: "GR" },
-  "🇮🇱": { name: "Israel", abbr: "IL" },
-  "🇮🇶": { name: "Iraq", abbr: "IQ" },
-  "🇹🇬": { name: "Togo", abbr: "TG" },
-  "🇪🇬": { name: "Egypt", abbr: "EG" },
-  "🇯🇴": { name: "Jordan", abbr: "JO" },
-  "🇹🇳": { name: "Tunisia", abbr: "TN" },
-  "🇦🇪": { name: "Dubai", abbr: "AE" },
-  "🇸🇦": { name: "Saudi Arabia", abbr: "SA" },
-  "🇺🇿": { name: "Uzbekistan", abbr: "UZ" },
-  "🇵🇰": { name: "Pakistan", abbr: "PK" },
-  "🇰🇿": { name: "Kazakhstan", abbr: "KZ" },
-  "🇳🇬": { name: "Nigeria", abbr: "NG" },
-  "🇦🇴": { name: "Angola", abbr: "AO" },
-  "🇿🇦": { name: "South Africa", abbr: "ZA" },
-  "🇦🇶": { name: "Antarctica", abbr: "AQ" },
-  "🇮🇳": { name: "India", abbr: "IN" },
-  "🇮🇩": { name: "Indonesia", abbr: "ID" },
-  "🇵🇭": { name: "Philippines", abbr: "PH" },
-  "🇲🇴": { name: "Macao", abbr: "MO" },
-  "🇹🇭": { name: "Thailand", abbr: "TH" },
-  "🇻🇳": { name: "Vietnam", abbr: "VN" },
-  "🇰🇭": { name: "Cambodia", abbr: "KH" },
-  "🇧🇩": { name: "Bangladesh", abbr: "BD" },
-  "🇳🇵": { name: "Nepal", abbr: "NP" },
-  "🇲🇳": { name: "Mongolia", abbr: "MN" },
-  "🇳🇿": { name: "New Zealand", abbr: "NZ" },
-};
-const flagStr = ($server.name.match(/^[\u{1F1E6}-\u{1F1FF}]{2}/u) || [])[0] || "";
-const cleanedName = $server.name.replace(flagStr, "").trim();
-const words = [...new Intl.Segmenter(undefined, { granularity: "word" }).segment(cleanedName)]
-  .filter(s => s.isWordLike || /[-.]/.test(s.segment)).map(s => s.segment);
+const provider = $arguments.provider ?? "Provider",
+  out = $arguments.out ?? "abbr",
+  countryData = {
+    "🇭🇰": { full: "Hong Kong", abbr: "HK" },
+    "🇺🇸": { full: "United States", abbr: "US" },
+    "🇯🇵": { full: "Japan", abbr: "JP" },
+    "🇸🇬": { full: "Singapore", abbr: "SG" },
+    "🇹🇼": { full: "Taiwan", abbr: "TW" },
+    "🇨🇳": { full: "Taiwan", abbr: "TW" },
+    "🇰🇷": { full: "South Korea", abbr: "KR" },
+    "🇩🇪": { full: "Germany", abbr: "DE" },
+    "🇹🇷": { full: "Türkiye", abbr: "TR" },
+    "🇲🇾": { full: "Malaysia", abbr: "MY" },
+    "🇦🇺": { full: "Australia", abbr: "AU" },
+    "🇬🇧": { full: "United Kingdom", abbr: "UK" },
+    "🇨🇦": { full: "Canada", abbr: "CA" },
+    "🇲🇽": { full: "Mexico", abbr: "MX" },
+    "🇧🇷": { full: "Brazil", abbr: "BR" },
+    "🇨🇱": { full: "Chile", abbr: "CL" },
+    "🇦🇷": { full: "Argentina", abbr: "AR" },
+    "🇨🇴": { full: "Colombia", abbr: "CO" },
+    "🇵🇪": { full: "Peru", abbr: "PE" },
+    "🇧🇴": { full: "Bolivia", abbr: "BO" },
+    "🇫🇷": { full: "France", abbr: "FR" },
+    "🇳🇱": { full: "Netherlands", abbr: "NL" },
+    "🇪🇸": { full: "Spain", abbr: "ES" },
+    "🇮🇪": { full: "Ireland", abbr: "IE" },
+    "🇮🇹": { full: "Italia", abbr: "IT" },
+    "🇱🇺": { full: "Luxembourg", abbr: "LU" },
+    "🇨🇭": { full: "Switzerland", abbr: "CH" },
+    "🇩🇰": { full: "Denmark", abbr: "DK" },
+    "🇫🇮": { full: "Finland", abbr: "FI" },
+    "🇸🇪": { full: "Sweden", abbr: "SE" },
+    "🇳🇴": { full: "Norway", abbr: "NO" },
+    "🇦🇹": { full: "Austria", abbr: "AT" },
+    "🇨🇿": { full: "Czech", abbr: "CZ" },
+    "🇮🇸": { full: "Iceland", abbr: "IS" },
+    "🇧🇪": { full: "Belgium", abbr: "BE" },
+    "🇵🇹": { full: "Portugal", abbr: "PT" },
+    "🇵🇱": { full: "Poland", abbr: "PL" },
+    "🇪🇪": { full: "Estonia", abbr: "EE" },
+    "🇭🇺": { full: "Hungary", abbr: "HU" },
+    "🇷🇺": { full: "Russia", abbr: "RU" },
+    "🇺🇦": { full: "Ukraine", abbr: "UA" },
+    "🇲🇩": { full: "Moldova", abbr: "MD" },
+    "🇷🇴": { full: "Romania", abbr: "RO" },
+    "🇧🇬": { full: "Bulgaria", abbr: "BG" },
+    "🇷🇸": { full: "Serbia", abbr: "RS" },
+    "🇬🇷": { full: "Greece", abbr: "GR" },
+    "🇮🇱": { full: "Israel", abbr: "IL" },
+    "🇮🇶": { full: "Iraq", abbr: "IQ" },
+    "🇹🇬": { full: "Togo", abbr: "TG" },
+    "🇪🇬": { full: "Egypt", abbr: "EG" },
+    "🇯🇴": { full: "Jordan", abbr: "JO" },
+    "🇹🇳": { full: "Tunisia", abbr: "TN" },
+    "🇦🇪": { full: "Dubai", abbr: "AE" },
+    "🇸🇦": { full: "Saudi Arabia", abbr: "SA" },
+    "🇺🇿": { full: "Uzbekistan", abbr: "UZ" },
+    "🇵🇰": { full: "Pakistan", abbr: "PK" },
+    "🇰🇿": { full: "Kazakhstan", abbr: "KZ" },
+    "🇳🇬": { full: "Nigeria", abbr: "NG" },
+    "🇦🇴": { full: "Angola", abbr: "AO" },
+    "🇿🇦": { full: "South Africa", abbr: "ZA" },
+    "🇦🇶": { full: "Antarctica", abbr: "AQ" },
+    "🇮🇳": { full: "India", abbr: "IN" },
+    "🇮🇩": { full: "Indonesia", abbr: "ID" },
+    "🇵🇭": { full: "Philippines", abbr: "PH" },
+    "🇲🇴": { full: "Macao", abbr: "MO" },
+    "🇹🇭": { full: "Thailand", abbr: "TH" },
+    "🇻🇳": { full: "Vietnam", abbr: "VN" },
+    "🇰🇭": { full: "Cambodia", abbr: "KH" },
+    "🇧🇩": { full: "Bangladesh", abbr: "BD" },
+    "🇳🇵": { full: "Nepal", abbr: "NP" },
+    "🇲🇳": { full: "Mongolia", abbr: "MN" },
+    "🇳🇿": { full: "New Zealand", abbr: "NZ" }
+  },
+  abMap = Object.values(countryData).reduce((m, o) => (m[o.abbr] = o, m), {});
 
-const getCountry = (abbrKey, type = out.toLowerCase() === 'all' ? 'name' : 'abbr') => 
-  Object.values(countryData).find(c => c.abbr === abbrKey)?.[type] || "";
+const flag = $server.name.match(/^[\u{1F1E6}-\u{1F1FF}]{2}/u)?.[0] || "",
+  words = [...new Intl.Segmenter(undefined, { granularity: "word" })
+    .segment($server.name.replace(flag, "").trim())]
+    .filter(s => s.isWordLike || /[-.]/.test(s.segment))
+    .map(s => s.segment),
+  country = flag && countryData[flag]
+    ? countryData[flag][out]
+    : (words[0] ? abMap[words[0].slice(0, 2).toUpperCase()]?.[out] : ""),
+  processed = [provider + " " + country].concat(
+    words.slice(1).filter(x => !/ˣ|\b(x\d+|\d+x)/i.test(x.replace(/ˣ/g, "")))
+  );
 
-let countryName = flagStr ? getCountry(countryData[flagStr]?.abbr) : words[0]?.substring(0,2).toUpperCase();
-
-countryName = flagStr && countryData[flagStr] 
-  ? (out === 'all' ? countryData[flagStr].name : countryData[flagStr].abbr) 
-  : getCountry(words[0]?.substring(0,2).toUpperCase()) || "";
-
-const processed = [`${provider} ${countryName}`].concat(
-  words.slice(1).filter(w => !/ˣ|\b(x\d+|\d+x)/i.test(w.replace(/ˣ/g, "")))
-);
-
-$server.name = flagStr + processed.reduce((a,c,i) => `${a}${i&&!/[-.]/.test(a.slice(-1))?' ':''}${c}`);
+$server.name = flag + " " + processed.reduce((a, c) => /[-.]$/.test(a) ? a + c : a + " " + c);
