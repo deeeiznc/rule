@@ -89,6 +89,16 @@ function operator(pro) {
         }
       }
     }
+    if (!bktf && BLKEY) for (const k of BLKEYS) {
+      const parts = k.split(">");
+      if (parts[1] && ens.includes(parts[0])) {
+        if (!e.name.includes(parts[0])) e.name += " " + parts[0];
+        retainKey = parts[1];
+      } else if (ens.includes(k)) {
+        if (!e.name.includes(k)) e.name += " " + k;
+        retainKey = k;
+      }
+    }
     e["block-quic"] = /^(on|off)$/.test(blockquic) ? blockquic : (delete e["block-quic"], undefined);
     if (!bktf && BLKEY) for (const k of BLKEYS) { const parts = k.split(">"); parts[1] && e.name.includes(parts[0]) && (retainKey = parts[1]); }
     let ikey = "", ikeys = "";
