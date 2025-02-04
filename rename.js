@@ -14,7 +14,7 @@ const inArg = $arguments,
   FNAME = decodeURI(inArg.name ?? ""),
   BLKEY = decodeURI(inArg.blkey ?? ""),
   blockquic = decodeURI(inArg.blockquic ?? ""),
-  inName = inArg.in || "",
+  inName = arrayMap[inArg.in || ""],
   outName = arrayMap[inArg.out || ""] || abbr;
 
 const specialRegex = [/(\d\.)?\d+×/, /IPLC|IEPL|Kern|Edge|Pro|Std|Exp|Biz|Fam|Game|Buy|Zx|LB|Game/],
@@ -68,7 +68,7 @@ const ObjKA = i => (GetK = true, AMK = Object.entries(i));
 
 function operator(pro) {
   const allMap = {};
-  (inName ? arrayMap[inName] : [abbr, zh, en, flag]).forEach(arr => arr.forEach((v, i) => allMap[v] = outName[i]));
+  (inName ? inName : [abbr, zh, en, flag]).forEach(arr => arr.forEach((v, i) => allMap[v] = outName[i]));
   if (!GetK) ObjKA(allMap);
   if (clear || nx || blnx || key) pro = pro.filter(r => (!clear || !nameclear.test(r.name)) && (!nx || !namenx.test(r.name)) && (!blnx || nameblnx.test(r.name)) && (!key || (keya.test(r.name) && /2|4|6|7/i.test(r.name))));
   const BLKEYS = BLKEY ? BLKEY.split("+") : [];
