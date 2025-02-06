@@ -65,13 +65,16 @@ function operator(proxies) {
     inCountry = eval(inArg.in),
     outCountry = eval(inArg.out) || abbr;
   (inCountry ? inCountry : [flag, en, zh, abbr]).forEach(arr => arr.forEach((value, index) => allMap[value] = outCountry[index]));
-  if (clear || nx || blnx || key) proxies = proxies.filter(r => (!clear || !nameclear.test(r.name)) && (!nx || !namenx.test(r.name)) && (!blnx || nameblnx.test(r.name)) && (!key || (keya.test(r.name) && /[2467]/i.test(r.name))));
-  const BLKEYS = BLKEY ? BLKEY.split("+") : [];
+  if (clear || nx || blnx || key) proxies = proxies.filter(r => {
+    nameCache = r.name;
+    return (!clear || !nameclear.test(nameCache)) && (!nx || !namenx.test(nameCache)) && (!blnx || nameblnx.test(nameCache)) && (!key || (keya.test(nameCache) && /[2467]/i.test(nameCache)));
+  });
   for (const proxy of proxies) {
     const nameBak = proxy.name;
     let nameCache = nameBak;
     for (const [rk, reg] of Object.entries(rurekey)) nameCache = nameCache.replace(reg, rk);
-    if (BLKEY) { let retainKeys = []; for (const k of BLKEYS) { const part = k.split(">"); if (nameBak.includes(part[0])) retainKeys.push(part[1] || part[0]); } }
+    let retainKeys = [];
+    if (BLKEY) for (const k of BLKEY.split("+")) { const part = k.split(">"); if (nameBak.includes(part[0])) retainKeys.push(part[1] || part[0]); }
     proxy["block-quic"] = /^(on|off)$/.test(blockquic) ? blockquic : (delete proxy["block-quic"], undefined);
     let ikey = "", ikeys = "";
     if (blgd) for (let i = 0; i < regexArray.length; i++) regexArray[i].test(nameBak) && (ikeys = valueArray[i]);
