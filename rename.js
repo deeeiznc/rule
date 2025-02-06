@@ -60,69 +60,34 @@ const specialRegex = [/(\d\.)?\d+×/, /IPLC|IEPL|Kern|Edge|Pro|Std|Exp|Biz|Fam|G
     Esnc: /esnc/gi
   };
 
-let GetK = false, AMK = [];
-const ObjKA = i => (GetK = true, AMK = Object.entries(i));
-
-function operator(pro) {
-  const allMap = {},
-    inCountry = eval(inArg.in),
-    outCountry = eval(inArg.out) || abbr;
-  (inCountry ? inCountry : [flag, en, zh, abbr]).forEach(arr => arr.forEach((v, i) => allMap[v] = outCountry[i]));
-  if (!GetK) ObjKA(allMap);
-  if (clear || nx || blnx || key) pro = pro.filter(r => (!clear || !nameclear.test(r.name)) && (!nx || !namenx.test(r.name)) && (!blnx || nameblnx.test(r.name)) && (!key || (keya.test(r.name) && /2|4|6|7/i.test(r.name))));
-  const BLKEYS = BLKEY ? BLKEY.split("+") : [];
-  for (const e of pro) {
-    let bktf = false, ens = e.name, retainKey = "";
-    for (const [rk, reg] of Object.entries(rurekey)) if (reg.test(e.name)) {
-      e.name = e.name.replace(reg, rk);
-      if (BLKEY) {
-        bktf = true;
-        for (const k of BLKEYS) {
-          const parts = k.split(">");
-          if (parts[1] && ens.includes(parts[0])) {
-            reg.test(parts[0]) && (e.name += " " + parts[0]);
-            retainKey = parts[1];
-          } else if (ens.includes(k)) {
-            e.name += " " + k;
-            retainKey = BLKEYS.filter(item => e.name.includes(item));
-          }
-        }
-      }
-    }
-    if (!bktf && BLKEY) for (const k of BLKEYS) {
-      const parts = k.split(">");
-      if (parts[1] && ens.includes(parts[0])) {
-        if (!e.name.includes(parts[0])) e.name += " " + parts[0];
-        retainKey = parts[1];
-      } else if (ens.includes(k)) {
-        if (!e.name.includes(k)) e.name += " " + k;
-        retainKey = k;
-      }
-    }
-    e["block-quic"] = /^(on|off)$/.test(blockquic) ? blockquic : (delete e["block-quic"], undefined);
-    if (!bktf && BLKEY) for (const k of BLKEYS) { const parts = k.split(">"); parts[1] && e.name.includes(parts[0]) && (retainKey = parts[1]); }
-    let ikey = "", ikeys = "";
-    if (blgd) for (let i = 0; i < regexArray.length; i++) regexArray[i].test(e.name) && (ikeys = valueArray[i]);
-    if (bl) {
-      const m = e.name.match(/(?:倍率|[Xx×])\D?((?:\d{1,3}\.)?\d+)|((?:\d{1,3}\.)?\d+)(?:倍|[Xx×])/);
-      if (m) { const rev = m[1] || m[2]; rev !== "1" && (ikey = rev + "×"); }
-    }
-    const [firstName, nNames] = nf ? [FNAME, ""] : ["", FNAME],
-      findKey = AMK.find(([k]) => e.name.includes(k));
-    const keyVal = findKey?.[1] || ((m = e.name.match(/[澳德港日新坡美台韩俄泰法]/)) ? { "澳": "AU", "德": "DE", "港": "HK", "日": "JP", "坡": "SG", "美": "US", "台": "TW", "韩": "KR", "俄": "RU", "泰": "TH", "法": "FR" }[m[0]] : null);
-    if (keyVal) {
-      const idx = outCountry.indexOf(keyVal);
-      e.name = [firstName, addflag && idx !== -1 ? (flag[idx] === "🇹🇼" ? "🇨🇳" : flag[idx]) : "", nNames, keyVal, retainKey, ikey, ikeys].filter(Boolean).join(FGF);
-    } else e.name = nm ? FNAME + FGF + e.name : null;
-  }
-  pro = pro.filter(e => e.name);
-  if (blpx) {
-    const wis = [], wnout = [];
-    for (const p of pro) (specialRegex.some(r => r.test(p.name)) ? wis : wnout).push(p);
-    const sps = wis.map(p => specialRegex.findIndex(r => r.test(p.name)));
-    wis.sort((a, b) => sps[wis.indexOf(a)] - sps[wis.indexOf(b)] || a.name.localeCompare(b.name));
-    wnout.sort((a, b) => pro.indexOf(a) - pro.indexOf(b));
-    pro = wnout.concat(wis);
-  }
-  return key ? pro.filter(e => !keyb.test(e.name)) : pro;
+const allMap = {},
+  inCountry = eval(inArg.in),
+  outCountry = eval(inArg.out) || abbr;
+(inCountry ? inCountry : [flag, en, zh, abbr]).forEach(arr => arr.forEach((value, index) => allMap[value] = outCountry[index]));
+if (clear || nx || blnx || key) proxies = proxies.filter(r => (!clear || !nameclear.test(r.name)) && (!nx || !namenx.test(r.name)) && (!blnx || nameblnx.test(r.name)) && (!key || (keya.test(r.name) && /[2467]/i.test(r.name))));
+const BLKEYS = BLKEY ? BLKEY.split("+") : [];
+for (const proxy of proxies) {
+  const nameBak = proxy.name;
+  let nameCache = nameBak;
+  for (const [rk, reg] of Object.entries(rurekey)) nameCache = nameCache.replace(reg, rk);
+  if (BLKEY) { let retainKeys = []; for (const k of BLKEYS) { const part = k.split(">"); if (nameBak.includes(part[0])) retainKeys.push(part[1] || part[0]); } }
+  proxy["block-quic"] = /^(on|off)$/.test(blockquic) ? blockquic : (delete proxy["block-quic"], undefined);
+  let ikey = "", ikeys = "";
+  if (blgd) for (let i = 0; i < regexArray.length; i++) regexArray[i].test(nameBak) && (ikeys = valueArray[i]);
+  if (bl) { const m = nameBak.match(/(?:倍率|[Xx×])\D?((?:\d{1,3}\.)?\d+)|((?:\d{1,3}\.)?\d+)(?:倍|[Xx×])/); if (m) { const rev = m[1] || m[2]; rev !== "1" && (ikey = rev + "×"); } }
+  const keyVal = Object.entries(allMap).find(([k]) => nameCache.includes(k))?.[1] || ((m = nameCache.match(/[澳德港日新坡美台韩俄泰法]/)) ? { "澳": "AU", "德": "DE", "港": "HK", "日": "JP", "坡": "SG", "美": "US", "台": "TW", "韩": "KR", "俄": "RU", "泰": "TH", "法": "FR" }[m[0]] : null);
+  if (keyVal) {
+    const idx = outCountry.indexOf(keyVal);
+    if (nf) proxy.name = [FNAME, addflag && idx !== -1 ? (flag[idx] === "🇹🇼" ? "🇨🇳" : flag[idx]) : "", keyVal, retainKeys.join(FGF), ikey, ikeys].filter(Boolean).join(FGF);
+    else proxy.name = [addflag && idx !== -1 ? (flag[idx] === "🇹🇼" ? "🇨🇳" : flag[idx]) : "", FNAME, keyVal, retainKeys.join(FGF), ikey, ikeys].filter(Boolean).join(FGF);
+  } else proxy.name = nm ? FNAME + nameBak : null;
 }
+proxies = proxies.filter(proxy => proxy.name);
+if (blpx) {
+  const wis = [], wnout = [];
+  for (const proxy of proxies) (specialRegex.some(r => r.test(proxy.name)) ? wis : wnout).push(proxy);
+  const sps = wis.map(p => specialRegex.findIndex(r => r.test(p.name)));
+  wis.sort((a, b) => sps[wis.indexOf(a)] - sps[wis.indexOf(b)] || a.name.localeCompare(b.name));
+  proxies = wnout.sort((a, b) => proxies.indexOf(a) - proxies.indexOf(b)).concat(wis);
+}
+return key ? proxies.filter(e => !keyb.test(e.name)) : proxies;
