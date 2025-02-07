@@ -83,7 +83,12 @@ function operator(proxies) {
       let nameCache = nameBak;
       for (const [rk, reg] of Object.entries(rurekey)) nameCache = nameCache.replace(reg, rk);
       let retainKeys = [];
-      if (BLKEY) for (const k of BLKEY.split("+")) { const part = k.split(">"); if (nameBak.includes(part[0])) retainKeys.push(part[1] || part[0]); }
+      if (BLKEY) for (const k of BLKEY.split("+")) {
+        const part = k.split(">");
+        if (part[1]) {
+          if (nameBak.includes(part[0])) retainKeys.push(part[1]);
+        } else if (nameBak.includes(k)) retainKeys.push(k);
+      }
       proxy["block-quic"] = /^(on|off)$/.test(blockquic) ? blockquic : (delete proxy["block-quic"], undefined);
       let ikey = "", ikeys = "";
       if (blgd) for (let i = 0; i < regexArray.length; i++) regexArray[i].test(nameBak) && (ikeys = valueArray[i]);
