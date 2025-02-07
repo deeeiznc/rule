@@ -1,9 +1,9 @@
 /**
- * 用法：Sub-Store 脚本操作添加
- * 参数示例：#flag&blkey=GPT>新名字+NF
+ * Usage: Add a script operation to the Sub-Store
+ * Parameter example: #flag&blkey=GPT>new name+NF
  */
 const inArg = $arguments,
-  { nx = false, bl = false, nf = false, key = false, blgd = false, blpx = false, blnx = false, debug = false, clear = false, nm = false, flag: addflag = false } = inArg,
+  { nx = false, bl = false, nf = false, blgd = false, blpx = false, blnx = false, debug = false, clear = false, nm = false, flag: addflag = false } = inArg,
   FGF = decodeURI(inArg.fgf ?? " "),
   FNAME = decodeURI(inArg.name ?? ""),
   BLKEY = decodeURI(inArg.blkey ?? ""),
@@ -20,8 +20,6 @@ const specialRegex = [/(\d\.)?\d+×/, /IPLC|IEPL|Kern|Edge|Pro|Std|Exp|Biz|Fam|G
   valueArray = ["2×", "3×", "4×", "5×", "6×", "7×", "8×", "9×", "10×", "20×", "30×", "40×", "50×", "IPLC", "IEPL", "Kern", "Edge", "Pro", "Std", "Exp", "Biz", "Fam", "Game", "Buy", "Zx", "LB", "CF", "UDP", "GPT", "UDPN"],
   nameblnx = /(高倍|(?!1)2+(x|倍)|ˣ²|ˣ³|ˣ⁴|ˣ⁵|ˣ¹⁰)/i,
   namenx = /(高倍|(?!1)(0\.|\d)+(x|倍)|ˣ²|ˣ³|ˣ⁴|ˣ⁵|ˣ¹⁰)/i,
-  keya = /港|Hong|HK|新加坡|SG|Singapore|日本|Japan|JP|美国|United States|US|韩|土耳其|TR|Turkey|Korea|KR|🇸🇬|🇭🇰|🇯🇵|🇺🇸|🇰🇷|🇹🇷/i,
-  keyb = /(((1|2|3|4)\d)|(香港|Hong|HK) 0[5-9]|((新加坡|SG|Singapore|日本|Japan|JP|美国|United States|US|韩|土耳其|TR|Turkey|Korea|KR) 0[3-9]))/i,
   rurekey = {
     GB: /UK/g,
     "B-G-P": /BGP/g,
@@ -61,14 +59,24 @@ const specialRegex = [/(\d\.)?\d+×/, /IPLC|IEPL|Kern|Edge|Pro|Std|Exp|Biz|Fam|G
   };
 
 function operator(proxies) {
-  const allMap = {},
-    inCountry = eval(inArg.in),
-    outCountry = eval(inArg.out) || abbr;
-  (inCountry ? inCountry : [flag, en, zh, abbr]).forEach(arr => arr.forEach((value, index) => allMap[value] = outCountry[index]));
-  if (clear || nx || blnx || key) proxies = proxies.filter(r => {
-    nameCache = r.name;
-    return (!clear || !nameclear.test(nameCache)) && (!nx || !namenx.test(nameCache)) && (!blnx || nameblnx.test(nameCache)) && (!key || (keya.test(nameCache) && /[2467]/i.test(nameCache)));
-  });
+  const allMap = {};
+  switch (inArg.in) {
+    case 'flag': inCountry = flag; break;
+    case 'en': inCountry = en; break;
+    case 'zh': inCountry = zh; break;
+    case 'abbr': inCountry = abbr; break;
+    default: inCountry = [flag, en, zh, abbr];
+  };
+  switch (inArg.out) {
+    case 'flag': outCountry = flag; break;
+    case 'en': outCountry = en; break;
+    case 'zh': outCountry = zh; break;
+    default: outCountry = abbr;
+  };
+  (inCountry).forEach(arr => arr.forEach((value, index) => allMap[value] = outCountry[index]));
+  if (clear) proxies = proxies.filter(proxy => !nameclear.test(proxy.name));
+  if (nx) proxies = proxies.filter(proxy => !namenx.test(proxy.name));
+  if (blnx) proxies = proxies.filter(proxy => nameblnx.test(proxy.name));
   if (addflag) {
     for (const proxy of proxies) {
       const nameBak = proxy.name;
@@ -111,7 +119,7 @@ function operator(proxies) {
     for (const proxy of proxies) (specialRegex.some(r => r.test(proxy.name)) ? wis : wnout).push(proxy);
     const sps = wis.map(p => specialRegex.findIndex(r => r.test(p.name)));
     wis.sort((a, b) => sps[wis.indexOf(a)] - sps[wis.indexOf(b)] || a.name.localeCompare(b.name));
-    proxies = wnout.sort((a, b) => proxies.indexOf(a) - proxies.indexOf(b)).concat(wis);
+    return wnout.sort((a, b) => proxies.indexOf(a) - proxies.indexOf(b)).concat(wis);
   }
-  return key ? proxies.filter(e => !keyb.test(e.name)) : proxies;
+  return proxies;
 }
