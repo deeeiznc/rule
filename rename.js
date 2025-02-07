@@ -116,10 +116,13 @@ function operator(proxies) {
   proxies = proxies.filter(proxy => proxy.name);
   if (blpx) {
     const wis = [], wnout = [];
-    for (const proxy of proxies) (specialRegex.some(r => r.test(proxy.name)) ? wis : wnout).push(proxy);
-    const sps = wis.map(p => specialRegex.findIndex(r => r.test(p.name)));
-    wis.sort((a, b) => sps[wis.indexOf(a)] - sps[wis.indexOf(b)] || a.name.localeCompare(b.name));
-    return wnout.sort((a, b) => proxies.indexOf(a) - proxies.indexOf(b)).concat(wis);
+    for (let i = 0; i < proxies.length; i++) {
+      const x = proxies[i];
+      if (specialRegex.some(r => r.test(x.name))) wis.push({ x, i, sp: specialRegex.findIndex(r => r.test(x.name)) });
+      else wnout.push({ x, i });
+    }
+    wis.sort((a, b) => a.sp - b.sp || a.x.name.localeCompare(b.x.name));
+    return wnout.sort((a, b) => a.i - b.i).map(o => o.x).concat(wis.map(o => o.x));
   }
   return proxies;
 }
