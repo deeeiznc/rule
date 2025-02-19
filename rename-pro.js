@@ -192,7 +192,7 @@ const provider = $arguments.provider ?? "Provider",
     "🇧🇲": { full: "Bermuda", abbr: "BM" },
     "🇹🇱": { full: "Timor-Leste", abbr: "TL" },
   },
-  abMap = Object.values(countryData).reduce((m, o) => ((m[o.abbr] = o), m), {});
+  abMap = Object.values(geoData).reduce((m, o) => ((m[o.abbr] = o), m), {});
 
 const flag = $server.name.match(/^[\u{1F1E6}-\u{1F1FF}]{2}/u)?.[0] || "",
   words = [
@@ -203,8 +203,8 @@ const flag = $server.name.match(/^[\u{1F1E6}-\u{1F1FF}]{2}/u)?.[0] || "",
     .filter((s) => s.isWordLike || /[-.]/.test(s.segment))
     .map((s) => s.segment),
   country =
-    flag && countryData[flag]
-      ? countryData[flag][out]
+    flag && geoData[flag]
+      ? geoData[flag][out]
       : words[0]
       ? abMap[words[0].slice(0, 2).toUpperCase()]?.[out]
       : "",
