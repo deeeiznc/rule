@@ -884,7 +884,7 @@ const specialRegex = [
     /\bBJ|BJ\b/,
     /\bNB|NB\b/,
     /\bHZ|HZ\b/,
-    "",
+    / /,
     /\bWY|WY\b/,
     /\bUDPN|UDPN\b/,
     /\bTX|TX\b/,
