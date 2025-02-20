@@ -791,11 +791,11 @@ const abbr = [
 
 const specialRegex = [
     /(\d\.)?\d+×/,
-    /IPLC|IEPL|Kern|Edge|Pro|Std|Exp|Biz|Fam|Game|Buy|Zx|LB|Game/,
+    /IPLC|IEPL|Kern|Edge|Pro|Std|Exp|Biz|Fam|Game|Buy|Zx|Game/,
   ],
   nameclear =
     /套餐|到期|有效|剩余|版本|已用|过期|失联|测试|官方|网址|备用|群|客服|网站|获取|订阅|流量|机场|下次|官址|联系|邮箱|工单|学术|文档|USE|TOTAL|EXPIRE|EMAIL|TRAFFIC|\d\s?[GTM](?:[^AC-Z0-9]|$)/i,
-  regexpArray1 = [
+  regexpUse = [
     /商宽|BUSINESS|BIZ/i,
     /家宽|HOME|\bHO\b/i,
     /DC1/,
@@ -808,7 +808,22 @@ const specialRegex = [
     /购物|SHOP/i,
     /GOOGLE PLAY|GOOGLEPLAY/i,
     /PORNHUB/i,
-    /\bLB\b/,
+  ],
+  valueUse1 = [
+    "Biz",
+    "Home",
+    "DC1",
+    "DC2",
+    "DC3",
+    "DC4",
+    "DC5",
+    "Emby",
+    "Game",
+    "Shop",
+    "GooglePlay",
+    "Pornhub",
+  ],
+  regexpLanding1 = [
     /\bEONS\b/i,
     /NEAROUTE/i,
     /\bHKT\b/i,
@@ -857,62 +872,7 @@ const specialRegex = [
     /SONET/i,
     /EASTERN/i,
   ],
-  regexpArray2 = [
-    /CLOUDFLARE/i,
-    /深圳|SHENZHEN/i,
-    /广州|GUANGZHOU/i,
-    /广东|GUANGDONG/i,
-    /上海|SHANGHAI/i,
-    /北京|BEIJING/i,
-    /宁波|NINGBO/i,
-    /杭州|HANGZHOU/i,
-    /唯一|唯云|WEIYI|WEIYUN|WCLOUD/i,
-    /优刻得|UCLOUD/i,
-    /腾讯|TENCENT/i,
-    /阿里|ALIBABA|ALIYUN|ALICLOUD/i,
-    /火山|VOLCANO|VOLCLOUD/i,
-    /网易|NETEASE/i,
-    /微软|MICROSOFT/i,
-    /百度|BAIDU/i,
-    /电信|TELECOM/i,
-    /移动|MOBILE/i,
-    /联通|UNICOM/i,
-  ],
-  regexpArray2b = [
-    /\bCF\b/,
-    /\bSZ|SZ\b/,
-    /\bGZ|GZ\b/,
-    /\bGD|GD\b/,
-    /\bSH|SH\b/,
-    /\bBJ|BJ\b/,
-    /\bNB|NB\b/,
-    /\bHZ|HZ\b/,
-    /\bWY|WY\b/,
-    /\bUDPN|UDPN\b/,
-    /\bTX|TX\b/,
-    /\bAli|Ali\b/,
-    /\bHS|HS\b/,
-    /\bNE|NE\b/,
-    /\bMS|MS\b/,
-    /\bBD|BD\b/,
-    /\bCT|CT\b/,
-    /\bCM|CM\b/,
-    /\bCU|CU\b/,
-  ],
-  valueArray1 = [
-    "Biz",
-    "Home",
-    "DC1",
-    "DC2",
-    "DC3",
-    "DC4",
-    "DC5",
-    "Emby",
-    "Game",
-    "Shop",
-    "GooglePlay",
-    "Pornhub",
-    "LB",
+  valueLanding1 = [
     "Eons",
     "Nearoute",
     "HKT",
@@ -961,27 +921,63 @@ const specialRegex = [
     "SoNet",
     "Eastern",
   ],
-  valueArray2 = [
-    "CF",
-    "SZ",
-    "GZ",
-    "GD",
-    "SH",
-    "BJ",
-    "NB",
-    "HZ",
+  regexpLanding2 = [/CLOUDFLARE/i],
+  regexpLanding2b = [/\bCF\b/],
+  valueLanding2 = ["CF"],
+  regexpEntryRegion = [
+    /深|SHENZHEN/i,
+    /广|GUANGZHOU/i,
+    /粤|GUANGDONG/i,
+    /上海|沪|SHANGHAI/i,
+    /北京|京|BEIJING/i,
+    /宁波|甬|NINGBO/i,
+    /杭州|杭|HANGZHOU/i,
+  ],
+  regexpEntryRegionb = [
+    /\bSZ|SZ\b/,
+    /\bGZ|GZ\b/,
+    /\bGD|GD\b/,
+    /\bSH|SH\b/,
+    /\bBJ|BJ\b/,
+    /\bNB|NB\b/,
+    /\bHZ|HZ\b/,
+  ],
+  valueEntryRegion = ["SZ", "GZ", "GD", "SH", "BJ", "NB", "HZ"],
+  regexpEntryCloud1 = [/萌凛云|OWO/i],
+  valueEntryCloud1 = ["OwOCloud"],
+  regexpEntryCloud2 = [
+    /唯一|唯云|WEIYI|WEIYUN|WCLOUD/i,
+    /优刻得|UCLOUD/i,
+    /腾讯|TENCENT/i,
+    /阿里|ALIBABA|ALIYUN|ALICLOUD/i,
+    /火山|VOLCANO|VOLCLOUD/i,
+    /网易|NETEASE/i,
+    /微软|MICROSOFT/i,
+    /百度|BAIDU/i,
+  ],
+  regexpEntryCloud2b = [
+    /\bWY|WY\b/,
+    /\bUDPN|UDPN\b/,
+    /\bTX|TX\b/,
+    /\bAli|Ali\b/,
+    /\bHS|HS\b/,
+    /\bNE|NE\b/,
+    /\bMS|MS\b/,
+    /\bBD|BD\b/,
+  ],
+  valueEntryCloud2 = [
     "WCloud",
     "UCloud",
     "Tencent",
-    "Ali",
+    "Aliyun",
     "Volcano",
     "Netease",
     "Microsoft",
     "Baidu",
-    "CT",
-    "CM",
-    "CU",
   ],
+  regexpEntryISP = [/电信|TELECOM/i, /移动|MOBILE/i, /联通|UNICOM/i],
+  regexpEntryISPb = [/\bCT|CT\b/, /\bCM|CM\b/, /\bCU|CU\b/],
+  valueEntryISP = ["CT", "CM", "CU"],
   nameblnx = /(高倍|(?!1)2+(x|倍)|ˣ²|ˣ³|ˣ⁴|ˣ⁵|ˣ¹⁰)/i,
   namenx = /(高倍|(?!1)(0\.|\d)+(x|倍)|ˣ²|ˣ³|ˣ⁴|ˣ⁵|ˣ¹⁰)/i,
   rureRegExp = [
@@ -994,11 +990,11 @@ const specialRegex = [
     /韩|Korea/,
     /台/,
     /美/,
-    /坡|新/,
+    /新|坡/,
     /日/,
     /港/,
     /伊斯坦布尔/,
-    /泰國|曼谷/,
+    /曼谷|泰國/,
     /Zurich|苏黎世/,
     /Moscow|莫斯科/,
     /印度尼西亚|雅加达/,
@@ -1006,17 +1002,17 @@ const specialRegex = [
     /波黑共和国/,
     /孟加拉/,
     /Dubai|迪拜|阿拉伯联合酋长国/,
-    /澳洲|墨尔本|悉尼|(深|沪|呼|京|广|杭)澳/,
+    /澳洲|Melbourne|墨尔本|Sydney|悉尼|(深|沪|呼|京|广|杭)澳/,
     /Paris|巴黎/,
     /UK|London|伦敦|Great Britain/,
     /(深|沪|呼|京|广|杭)德(?!.*(I|线))|Frankfurt|法兰克福|滬德/,
     /Amsterdam|阿姆斯特丹/,
     /Chuncheon|春川|Seoul|首尔/,
     /🇹🇼|新台|新北|台(?!.*线)/,
-    /USA|Los Angeles|San Jose|Silicon Valley|Michigan|(深|沪|呼|京|广|杭)美|波特兰|芝加哥|哥伦布|纽约|硅谷|俄勒冈|西雅图|芝加哥/,
+    /USA|Los Angeles|洛杉矶|San Jose|圣何塞|Silicon Valley|硅谷|Michigan|密西根|Portland|波特兰|Chicago|芝加哥|Columbus|哥伦布|New York|纽约|Oregon|俄勒冈|Seattle|西雅图|(深|沪|呼|京|广|杭)美/,
     /狮城|(深|沪|呼|京|广|杭)新/,
-    /Tokyo|Shinagawa|Osaka|东京|品川|大坂|(深|沪|呼|京|广|杭|中|辽)日(?!.*(I|线))/,
-    /HongKong|(深|沪|呼|京|广|杭)港(?!.*(I|线))/,
+    /(深|沪|呼|京|广|杭|中|辽)日(?!.*(I|线))|Tokyo|东京|Shinagawa|品川|Osaka|大坂/,
+    /(深|沪|呼|京|广|杭)港(?!.*(I|线))|HongKong/,
   ],
   rureValue = [
     158, 137, 12, 10, 9, 7, 5, 4, 3, 2, 1, 0, 163, 158, 154, 137, 80, 79, 30,
@@ -1046,17 +1042,50 @@ function operator(proxies) {
       const nameBak = proxy.name;
       let retainKeys = [];
       if (blgd) {
-        for (i = 0; i < regexpArray1.length; i++)
-          if (regexpArray1[i].test(nameBak)) retainKeys.push(valueArray1[i]);
-        for (i = 0; i < 7; i++)
-          if (regexpArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
-          else if (regexpArray2b[i].test(nameBak))
-            retainKeys.push(valueArray2[i]);
-        if (/萌凛云|OWO/i.test(nameBak)) retainKeys.push("OwOCloud");
-        for (; i < regexpArray2.length; i++)
-          if (regexpArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
-          else if (regexpArray2b[i].test(nameBak))
-            retainKeys.push(valueArray2[i]);
+        for (i = 0; i < regexpUse.length; i++)
+          if (regexpUse[i].test(nameBak)) retainKeys.push(valueUse[i]);
+        for (i = 0; i < regexpLanding1.length; i++)
+          if (regexpLanding1[i].test(nameBak)) {
+            retainKeys.push(valueLanding1[i]);
+            break;
+          }
+        if (i == regexpLanding1.length)
+          for (i = 0; i < regexpLanding2.length; i++)
+            if (
+              regexpLanding2[i].test(nameBak) ||
+              regexpLanding2b[i].test(nameBak)
+            ) {
+              retainKeys.push(valueLanding2[i]);
+              break;
+            }
+        for (i = 0; i < regexpEntryRegion.length; i++)
+          if (
+            regexpEntryRegion[i].test(nameBak) ||
+            regexpEntryRegionb[i].test(nameBak)
+          ) {
+            retainKeys.push(valueEntryRegion[i]);
+            break;
+          }
+        for (i = 0; i < regexpEntryCloud1.length; i++)
+          if (regexpEntryCloud1[i].test(nameBak)) {
+            retainKeys.push(valueEntryCloud1[i]);
+            break;
+          }
+        if (i == regexpEntryCloud1.length)
+          for (i = 0; i < regexpEntryCloud2.length; i++)
+            if (
+              regexpEntryCloud2[i].test(nameBak) ||
+              regexpEntryCloud2b[i].test(nameBak)
+            ) {
+              retainKeys.push(valueEntryCloud2[i]);
+              break;
+            }
+        for (i = 0; i < regexpEntryISP.length; i++)
+          if (
+            regexpEntryISP[i].test(nameBak) ||
+            regexpEntryISPb[i].test(nameBak)
+          )
+            retainKeys.push(valueEntryISP[i]);
       }
       if (BLKEY)
         for (const k of BLKEY.split("+")) {
@@ -1119,17 +1148,50 @@ function operator(proxies) {
       const nameBak = proxy.name;
       let retainKeys = [];
       if (blgd) {
-        for (i = 0; i < regexpArray1.length; i++)
-          if (regexpArray1[i].test(nameBak)) retainKeys.push(valueArray1[i]);
-        for (i = 0; i < 7; i++)
-          if (regexpArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
-          else if (regexpArray2b[i].test(nameBak))
-            retainKeys.push(valueArray2[i]);
-        if (/萌凛云|OWO/i.test(nameBak)) retainKeys.push("OwOCloud");
-        for (; i < regexpArray2.length; i++)
-          if (regexpArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
-          else if (regexpArray2b[i].test(nameBak))
-            retainKeys.push(valueArray2[i]);
+        for (i = 0; i < regexpUse.length; i++)
+          if (regexpUse[i].test(nameBak)) retainKeys.push(valueUse[i]);
+        for (i = 0; i < regexpLanding1.length; i++)
+          if (regexpLanding1[i].test(nameBak)) {
+            retainKeys.push(valueLanding1[i]);
+            break;
+          }
+        if (i == regexpLanding1.length)
+          for (i = 0; i < regexpLanding2.length; i++)
+            if (
+              regexpLanding2[i].test(nameBak) ||
+              regexpLanding2b[i].test(nameBak)
+            ) {
+              retainKeys.push(valueLanding2[i]);
+              break;
+            }
+        for (i = 0; i < regexpEntryRegion.length; i++)
+          if (
+            regexpEntryRegion[i].test(nameBak) ||
+            regexpEntryRegionb[i].test(nameBak)
+          ) {
+            retainKeys.push(valueEntryRegion[i]);
+            break;
+          }
+        for (i = 0; i < regexpEntryCloud1.length; i++)
+          if (regexpEntryCloud1[i].test(nameBak)) {
+            retainKeys.push(valueEntryCloud1[i]);
+            break;
+          }
+        if (i == regexpEntryCloud1.length)
+          for (i = 0; i < regexpEntryCloud2.length; i++)
+            if (
+              regexpEntryCloud2[i].test(nameBak) ||
+              regexpEntryCloud2b[i].test(nameBak)
+            ) {
+              retainKeys.push(valueEntryCloud2[i]);
+              break;
+            }
+        for (i = 0; i < regexpEntryISP.length; i++)
+          if (
+            regexpEntryISP[i].test(nameBak) ||
+            regexpEntryISPb[i].test(nameBak)
+          )
+            retainKeys.push(valueEntryISP[i]);
       }
       if (BLKEY)
         for (const k of BLKEY.split("+")) {
