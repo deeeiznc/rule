@@ -791,7 +791,7 @@ const specialRegex = [
   ],
   nameclear =
     /套餐|到期|有效|剩余|版本|已用|过期|失联|测试|官方|网址|备用|群|客服|网站|获取|订阅|流量|机场|下次|官址|联系|邮箱|工单|学术|文档|USE|TOTAL|EXPIRE|EMAIL|TRAFFIC|\d\s?[GTM](?:[^AC-Z0-9]|$)/i,
-  regexArray = [
+  regexArray1 = [
     /商宽|BUSINESS|BIZ/i,
     /家宽|HOME|\bHO\b/i,
     /DC1/,
@@ -803,40 +803,6 @@ const specialRegex = [
     /购物|SHOP/i,
     /GOOGLE PLAY|GOOGLEPLAY/i,
     /PORNHUB/i,
-    /深圳|SHENZHEN/i,
-    /\bSZ|SZ\b/,
-    /广州|GUANGZHOU/i,
-    /\bGZ|GZ\b/,
-    /广东|GUANGDONG/i,
-    /\bGD|GD\b/,
-    /上海|SHANGHAI/i,
-    /\bSH|SH\b/,
-    /北京|BEIJING/i,
-    /\bBJ|BJ\b/,
-    /宁波|NINGBO/i,
-    /\bNB|NB\b/,
-    /杭州|HANGZHOU/i,
-    /\bHZ|HZ\b/,
-    /唯一|唯云|WEIYI|WEIYUN|WCLOUD/i,
-    /\bWY|WY\b/,
-    /腾讯|TENCENT/i,
-    /\bTX|TX\b/,
-    /阿里|ALIBABA|ALIYUN|ALICLOUD/i,
-    /\bAli|Ali\b/,
-    /火山|VOLCANO|VOLCLOUD/i,
-    /\bHS|HS\b/,
-    /网易|NETEASE/i,
-    /\bNE|NE\b/,
-    /微软|MICROSOFT/i,
-    /\bMS|MS\b/,
-    /百度|BAIDU/i,
-    /\bBD|BD\b/,
-    /电信|TELECOM/i,
-    /\bCT|CT\b/,
-    /移动|MOBILE/i,
-    /\bCM|CM\b/,
-    /联通|UNICOM/i,
-    /\bCU|CU\b/,
     /\bLB\b/,
     /CLOUDFLARE/i,
     /\bUDP\b/i,
@@ -886,7 +852,45 @@ const specialRegex = [
     /SONET/i,
     /EASTERN/i,
   ],
-  valueArray = [
+  regexArray2 = [
+    /深圳|SHENZHEN/i,
+    /广州|GUANGZHOU/i,
+    /广东|GUANGDONG/i,
+    /上海|SHANGHAI/i,
+    /北京|BEIJING/i,
+    /宁波|NINGBO/i,
+    /杭州|HANGZHOU/i,
+    /唯一|唯云|WEIYI|WEIYUN|WCLOUD/i,
+    /腾讯|TENCENT/i,
+    /阿里|ALIBABA|ALIYUN|ALICLOUD/i,
+    /火山|VOLCANO|VOLCLOUD/i,
+    /网易|NETEASE/i,
+    /微软|MICROSOFT/i,
+    /百度|BAIDU/i,
+    /电信|TELECOM/i,
+    /移动|MOBILE/i,
+    /联通|UNICOM/i,
+  ],
+  regexArray2b = [
+    /\bSZ|SZ\b/,
+    /\bGZ|GZ\b/,
+    /\bGD|GD\b/,
+    /\bSH|SH\b/,
+    /\bBJ|BJ\b/,
+    /\bNB|NB\b/,
+    /\bHZ|HZ\b/,
+    /\bWY|WY\b/,
+    /\bTX|TX\b/,
+    /\bAli|Ali\b/,
+    /\bHS|HS\b/,
+    /\bNE|NE\b/,
+    /\bMS|MS\b/,
+    /\bBD|BD\b/,
+    /\bCT|CT\b/,
+    /\bCM|CM\b/,
+    /\bCU|CU\b/,
+  ],
+  valueArray1 = [
     "Biz",
     "Home",
     "DC1",
@@ -898,40 +902,6 @@ const specialRegex = [
     "Shop",
     "GooglePlay",
     "Pornhub",
-    "SZ",
-    "SZ",
-    "GZ",
-    "GZ",
-    "GD",
-    "GD",
-    "SH",
-    "SH",
-    "BJ",
-    "BJ",
-    "NB",
-    "NB",
-    "HZ",
-    "HZ",
-    "WCloud",
-    "WCloud",
-    "Tencent",
-    "Tencent",
-    "Ali",
-    "Ali",
-    "Volcano",
-    "Volcano",
-    "Netease",
-    "Netease",
-    "Microsoft",
-    "Microsoft",
-    "Baidu",
-    "Baidu",
-    "CT",
-    "CT",
-    "CM",
-    "CM",
-    "CU",
-    "CU",
     "LB",
     "CF",
     "UDP",
@@ -980,6 +950,25 @@ const specialRegex = [
     "SoftBank",
     "SoNet",
     "Eastern",
+  ],
+  valueArray2 = [
+    "SZ",
+    "GZ",
+    "GD",
+    "SH",
+    "BJ",
+    "NB",
+    "HZ",
+    "WCloud",
+    "Tencent",
+    "Ali",
+    "Volcano",
+    "Netease",
+    "Microsoft",
+    "Baidu",
+    "CT",
+    "CM",
+    "CU",
   ],
   nameblnx = /(高倍|(?!1)2+(x|倍)|ˣ²|ˣ³|ˣ⁴|ˣ⁵|ˣ¹⁰)/i,
   namenx = /(高倍|(?!1)(0\.|\d)+(x|倍)|ˣ²|ˣ³|ˣ⁴|ˣ⁵|ˣ¹⁰)/i,
@@ -1065,9 +1054,14 @@ function operator(proxies) {
       for (const [rk, reg] of Object.entries(rurekey))
         nameCache = nameCache.replace(reg, rk);
       let retainKeys = [];
-      if (blgd)
-        for (let i = 0; i < regexArray.length; i++)
-          if (regexArray[i].test(nameBak)) retainKeys.push(valueArray[i]);
+      if (blgd) {
+        for (let i = 0; i < regexArray1.length; i++)
+          if (regexArray1[i].test(nameBak)) retainKeys.push(valueArray1[i]);
+        for (let i = 0; i < regexArray2.length; i++)
+          if (regexArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
+          else if (regexArray2b[i].test(nameBak))
+            retainKeys.push(valueArray2[i]);
+      }
       if (BLKEY)
         for (const k of BLKEY.split("+")) {
           const part = k.split(">");
@@ -1142,9 +1136,14 @@ function operator(proxies) {
       for (const [rk, reg] of Object.entries(rurekey))
         nameCache = nameCache.replace(reg, rk);
       let retainKeys = [];
-      if (blgd)
-        for (let i = 0; i < regexArray.length; i++)
-          if (regexArray[i].test(nameBak)) retainKeys.push(valueArray[i]);
+      if (blgd) {
+        for (let i = 0; i < regexArray1.length; i++)
+          if (regexArray1[i].test(nameBak)) retainKeys.push(valueArray1[i]);
+        for (let i = 0; i < regexArray2.length; i++)
+          if (regexArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
+          else if (regexArray2b[i].test(nameBak))
+            retainKeys.push(valueArray2[i]);
+      }
       if (BLKEY)
         for (const k of BLKEY.split("+")) {
           const part = k.split(">");
