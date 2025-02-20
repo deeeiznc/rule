@@ -1037,113 +1037,7 @@ function operator(proxies) {
   if (nx) proxies = proxies.filter((proxy) => !namenx.test(proxy.name));
   if (blnx) proxies = proxies.filter((proxy) => nameblnx.test(proxy.name));
   let i;
-  if (addflag) {
-    for (const proxy of proxies) {
-      const nameBak = proxy.name;
-      let retainKeys = [];
-      if (blgd) {
-        for (i = 0; i < regexpUse.length; i++)
-          if (regexpUse[i].test(nameBak)) retainKeys.push(valueUse[i]);
-        for (i = 0; i < regexpLanding1.length; i++)
-          if (regexpLanding1[i].test(nameBak)) {
-            retainKeys.push(valueLanding1[i]);
-            break;
-          }
-        if (i == regexpLanding1.length)
-          for (i = 0; i < regexpLanding2.length; i++)
-            if (
-              regexpLanding2[i].test(nameBak) ||
-              regexpLanding2b[i].test(nameBak)
-            ) {
-              retainKeys.push(valueLanding2[i]);
-              break;
-            }
-        for (i = 0; i < regexpEntryRegion.length; i++)
-          if (
-            regexpEntryRegion[i].test(nameBak) ||
-            regexpEntryRegionb[i].test(nameBak)
-          ) {
-            retainKeys.push(valueEntryRegion[i]);
-            break;
-          }
-        for (i = 0; i < regexpEntryCloud1.length; i++)
-          if (regexpEntryCloud1[i].test(nameBak)) {
-            retainKeys.push(valueEntryCloud1[i]);
-            break;
-          }
-        if (i == regexpEntryCloud1.length)
-          for (i = 0; i < regexpEntryCloud2.length; i++)
-            if (
-              regexpEntryCloud2[i].test(nameBak) ||
-              regexpEntryCloud2b[i].test(nameBak)
-            ) {
-              retainKeys.push(valueEntryCloud2[i]);
-              break;
-            }
-        for (i = 0; i < regexpEntryISP.length; i++)
-          if (
-            regexpEntryISP[i].test(nameBak) ||
-            regexpEntryISPb[i].test(nameBak)
-          )
-            retainKeys.push(valueEntryISP[i]);
-      }
-      if (BLKEY)
-        for (const k of BLKEY.split("+")) {
-          const part = k.split(">");
-          if (part[1]) {
-            if (nameBak.includes(part[0])) retainKeys.push(part[1]);
-          } else if (nameBak.includes(k)) retainKeys.push(k);
-        }
-      proxy["block-quic"] = /^(on|off)$/.test(blockquic)
-        ? blockquic
-        : (delete proxy["block-quic"], undefined);
-      let ikey = "";
-      if (bl) {
-        const m = nameBak.match(
-          /(?:倍率|[Xx×])\D?((?:\d{1,3}\.)?\d+)|((?:\d{1,3}\.)?\d+)(?:倍|[Xx×])/
-        );
-        if (m) {
-          const rev = m[1] || m[2];
-          rev !== "1" && (ikey = rev + "×");
-        }
-      }
-      for (i = 0; i < 190; i++) {
-        if (nameBak.includes(flag[i])) break;
-        if (nameBak.includes(en[i])) break;
-        if (nameBak.includes(zh[i])) break;
-      }
-      if (i == 190)
-        for (i = 0; i < 190; i++) if (/\b${abbr[i]}\b/.test(nameBak)) break;
-      if (i == 190)
-        for (i = rureValue.length; i--; )
-          if (rureRegExp[i].test(nameBak)) {
-            i = rureValue[i];
-            break;
-          }
-      if (i != -1) {
-        if (nf)
-          proxy.name = [
-            FNAME,
-            flag[i],
-            i == 12 ? outCountry[i] + "-BGP" : outCountry[i],
-            retainKeys.join(FGF),
-            ikey,
-          ]
-            .filter(Boolean)
-            .join(FGF);
-        else
-          proxy.name = [
-            flag[i],
-            FNAME,
-            i == 12 ? outCountry[i] + "-BGP" : outCountry[i],
-            retainKeys.join(FGF),
-            ikey,
-          ]
-            .filter(Boolean)
-            .join(FGF);
-      } else proxy.name = nm ? FNAME + nameBak : null;
-    }
-  } else {
+  if (addflag)
     for (const proxy of proxies) {
       const nameBak = proxy.name;
       let retainKeys = [];
@@ -1227,6 +1121,116 @@ function operator(proxies) {
             break;
           }
       if (i != -1)
+        for (i = 0; i < 190; i++) if (nameBak.includes(abbr[i])) break;
+      if (i != 190) {
+        if (nf)
+          proxy.name = [
+            FNAME,
+            flag[i],
+            i == 12 ? outCountry[i] + "-BGP" : outCountry[i],
+            retainKeys.join(FGF),
+            ikey,
+          ]
+            .filter(Boolean)
+            .join(FGF);
+        else
+          proxy.name = [
+            flag[i],
+            FNAME,
+            i == 12 ? outCountry[i] + "-BGP" : outCountry[i],
+            retainKeys.join(FGF),
+            ikey,
+          ]
+            .filter(Boolean)
+            .join(FGF);
+      } else proxy.name = nm ? FNAME + nameBak : null;
+    }
+  else
+    for (const proxy of proxies) {
+      const nameBak = proxy.name;
+      let retainKeys = [];
+      if (blgd) {
+        for (i = 0; i < regexpUse.length; i++)
+          if (regexpUse[i].test(nameBak)) retainKeys.push(valueUse[i]);
+        for (i = 0; i < regexpLanding1.length; i++)
+          if (regexpLanding1[i].test(nameBak)) {
+            retainKeys.push(valueLanding1[i]);
+            break;
+          }
+        if (i == regexpLanding1.length)
+          for (i = 0; i < regexpLanding2.length; i++)
+            if (
+              regexpLanding2[i].test(nameBak) ||
+              regexpLanding2b[i].test(nameBak)
+            ) {
+              retainKeys.push(valueLanding2[i]);
+              break;
+            }
+        for (i = 0; i < regexpEntryRegion.length; i++)
+          if (
+            regexpEntryRegion[i].test(nameBak) ||
+            regexpEntryRegionb[i].test(nameBak)
+          ) {
+            retainKeys.push(valueEntryRegion[i]);
+            break;
+          }
+        for (i = 0; i < regexpEntryCloud1.length; i++)
+          if (regexpEntryCloud1[i].test(nameBak)) {
+            retainKeys.push(valueEntryCloud1[i]);
+            break;
+          }
+        if (i == regexpEntryCloud1.length)
+          for (i = 0; i < regexpEntryCloud2.length; i++)
+            if (
+              regexpEntryCloud2[i].test(nameBak) ||
+              regexpEntryCloud2b[i].test(nameBak)
+            ) {
+              retainKeys.push(valueEntryCloud2[i]);
+              break;
+            }
+        for (i = 0; i < regexpEntryISP.length; i++)
+          if (
+            regexpEntryISP[i].test(nameBak) ||
+            regexpEntryISPb[i].test(nameBak)
+          )
+            retainKeys.push(valueEntryISP[i]);
+      }
+      if (BLKEY)
+        for (const k of BLKEY.split("+")) {
+          const part = k.split(">");
+          if (part[1]) {
+            if (nameBak.includes(part[0])) retainKeys.push(part[1]);
+          } else if (nameBak.includes(k)) retainKeys.push(k);
+        }
+      proxy["block-quic"] = /^(on|off)$/.test(blockquic)
+        ? blockquic
+        : (delete proxy["block-quic"], undefined);
+      let ikey = "";
+      if (bl) {
+        const m = nameBak.match(
+          /(?:倍率|[Xx×])\D?((?:\d{1,3}\.)?\d+)|((?:\d{1,3}\.)?\d+)(?:倍|[Xx×])/
+        );
+        if (m) {
+          const rev = m[1] || m[2];
+          rev !== "1" && (ikey = rev + "×");
+        }
+      }
+      for (i = 0; i < 190; i++) {
+        if (nameBak.includes(flag[i])) break;
+        if (nameBak.includes(en[i])) break;
+        if (nameBak.includes(zh[i])) break;
+      }
+      if (i == 190)
+        for (i = 0; i < 190; i++) if (/\b${abbr[i]}\b/.test(nameBak)) break;
+      if (i == 190)
+        for (i = rureValue.length; i--; )
+          if (rureRegExp[i].test(nameBak)) {
+            i = rureValue[i];
+            break;
+          }
+      if (i != -1)
+        for (i = 0; i < 190; i++) if (nameBak.includes(abbr[i])) break;
+      if (i != 190)
         proxy.name = [
           FNAME,
           i == 12 ? outCountry[i] + "-BGP" : outCountry[i],
@@ -1237,7 +1241,6 @@ function operator(proxies) {
           .join(FGF);
       else proxy.name = nm ? FNAME + nameBak : null;
     }
-  }
   proxies = proxies.filter((proxy) => proxy.name);
   if (blpx) {
     const wis = [],
