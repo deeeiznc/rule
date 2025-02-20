@@ -8,11 +8,12 @@ const provider = $arguments.provider ?? "Provider",
     "🇹🇼": { full: "Taiwan", abbr: "TW" },
     "🇨🇳": { full: "Taiwan", abbr: "TW" },
     "🇰🇷": { full: "South Korea", abbr: "KR" },
-    "🇬🇧": { full: "United Kingdom", abbr: "GB" },
-    "🇫🇷": { full: "France", abbr: "FR" },
+    "🇳🇱": { full: "Netherlands", abbr: "NL" },
     "🇩🇪": { full: "Germany", abbr: "DE" },
-    "🇦🇺": { full: "Australia", abbr: "AU" },
+    "🇬🇧": { full: "United Kingdom", abbr: "GB" },
     "🇲🇴": { full: "Macao", abbr: "MO" },
+    "🇫🇷": { full: "France", abbr: "FR" },
+    "🇦🇺": { full: "Australia", abbr: "AU" },
     "🇦🇪": { full: "United Arab Emirates", abbr: "AE" },
     "🇦🇫": { full: "Afghanistan", abbr: "AF" },
     "🇦🇱": { full: "Albania", abbr: "AL" },
@@ -121,7 +122,6 @@ const provider = $arguments.provider ?? "Provider",
     "🇲🇲": { full: "Myanmar", abbr: "MM" },
     "🇳🇦": { full: "Namibia", abbr: "NA" },
     "🇳🇵": { full: "Nepal", abbr: "NP" },
-    "🇳🇱": { full: "Netherlands", abbr: "NL" },
     "🇳🇿": { full: "New Zealand", abbr: "NZ" },
     "🇳🇮": { full: "Nicaragua", abbr: "NI" },
     "🇳🇪": { full: "Niger", abbr: "NE" },
@@ -215,4 +215,6 @@ const flag = $server.name.match(/^[\u{1F1E6}-\u{1F1FF}]{2}/u)?.[0] || "",
 $server.name =
   flag +
   " " +
-  processed.reduce((a, c) => (/[-.]$/.test(a) ? a + c : a + " " + c));
+  processed.reduce((a, c) =>
+    /[-.]$/.test(a) || /^[-.]/.test(c) ? a + c : a + " " + c
+  );
