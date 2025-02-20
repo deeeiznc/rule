@@ -1120,7 +1120,7 @@ function operator(proxies) {
             i = rureValue[i];
             break;
           }
-      if (i != -1)
+      if (i == -1)
         for (i = 0; i < 190; i++) if (nameBak.includes(abbr[i])) break;
       if (i != 190) {
         if (nf)
@@ -1228,7 +1228,7 @@ function operator(proxies) {
             i = rureValue[i];
             break;
           }
-      if (i != -1)
+      if (i == -1)
         for (i = 0; i < 190; i++) if (nameBak.includes(abbr[i])) break;
       if (i != 190)
         proxy.name = [
