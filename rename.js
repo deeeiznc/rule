@@ -417,7 +417,7 @@ const abbr = [
     "France",
     "Australia",
     "Macau",
-    "European Union",
+    "Europe",
     "United Arab Emirates",
     "Afghanistan",
     "Albania",

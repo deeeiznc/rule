@@ -22,16 +22,18 @@ const inArg = $arguments,
 
 const abbr = [
     "HK",
-    "MO",
-    "TW",
     "JP",
-    "KR",
     "SG",
     "US",
+    "TW",
+    "KR",
+    "NL",
+    "DE",
     "GB",
     "FR",
-    "DE",
     "AU",
+    "MO",
+    "EU",
     "AE",
     "AF",
     "AL",
@@ -140,7 +142,6 @@ const abbr = [
     "MM",
     "NA",
     "NP",
-    "NL",
     "NZ",
     "NI",
     "NE",
@@ -213,16 +214,18 @@ const abbr = [
   ],
   zh = [
     "香港",
-    "澳门",
-    "台湾",
     "日本",
-    "韩国",
     "新加坡",
     "美国",
+    "台湾",
+    "韩国",
+    "荷兰",
+    "德国",
     "英国",
     "法国",
-    "德国",
     "澳大利亚",
+    "澳门",
+    "欧洲",
     "阿联酋",
     "阿富汗",
     "阿尔巴尼亚",
@@ -331,7 +334,6 @@ const abbr = [
     "缅甸",
     "纳米比亚",
     "尼泊尔",
-    "荷兰",
     "新西兰",
     "尼加拉瓜",
     "尼日尔",
@@ -409,11 +411,13 @@ const abbr = [
     "United States",
     "Taiwan",
     "South Korea",
+    "Netherlands",
+    "Germany",
     "United Kingdom",
     "France",
-    "Germany",
     "Australia",
     "Macau",
+    "Europe",
     "United Arab Emirates",
     "Afghanistan",
     "Albania",
@@ -522,7 +526,6 @@ const abbr = [
     "Myanmar",
     "Namibia",
     "Nepal",
-    "Netherlands",
     "New Zealand",
     "Nicaragua",
     "Niger",
@@ -595,16 +598,18 @@ const abbr = [
   ],
   flag = [
     "🇭🇰",
-    "🇲🇴",
-    "🇹🇼",
     "🇯🇵",
-    "🇰🇷",
     "🇸🇬",
     "🇺🇸",
+    "🇨🇳",
+    "🇰🇷",
+    "🇳🇱",
+    "🇩🇪",
     "🇬🇧",
     "🇫🇷",
-    "🇩🇪",
     "🇦🇺",
+    "🇲🇴",
+    "🇪🇺",
     "🇦🇪",
     "🇦🇫",
     "🇦🇱",
@@ -713,7 +718,6 @@ const abbr = [
     "🇲🇲",
     "🇳🇦",
     "🇳🇵",
-    "🇳🇱",
     "🇳🇿",
     "🇳🇮",
     "🇳🇪",
@@ -791,7 +795,7 @@ const specialRegex = [
   ],
   nameclear =
     /套餐|到期|有效|剩余|版本|已用|过期|失联|测试|官方|网址|备用|群|客服|网站|获取|订阅|流量|机场|下次|官址|联系|邮箱|工单|学术|文档|USE|TOTAL|EXPIRE|EMAIL|TRAFFIC|\d\s?[GTM](?:[^AC-Z0-9]|$)/i,
-  regexArray1 = [
+  regexpArray1 = [
     /商宽|BUSINESS|BIZ/i,
     /家宽|HOME|\bHO\b/i,
     /DC1/,
@@ -853,7 +857,7 @@ const specialRegex = [
     /SONET/i,
     /EASTERN/i,
   ],
-  regexArray2 = [
+  regexpArray2 = [
     /CLOUDFLARE/i,
     /深圳|SHENZHEN/i,
     /广州|GUANGZHOU/i,
@@ -874,7 +878,7 @@ const specialRegex = [
     /移动|MOBILE/i,
     /联通|UNICOM/i,
   ],
-  regexArray2b = [
+  regexpArray2b = [
     /\bCF\b/,
     /\bSZ|SZ\b/,
     /\bGZ|GZ\b/,
@@ -980,60 +984,46 @@ const specialRegex = [
   ],
   nameblnx = /(高倍|(?!1)2+(x|倍)|ˣ²|ˣ³|ˣ⁴|ˣ⁵|ˣ¹⁰)/i,
   namenx = /(高倍|(?!1)(0\.|\d)+(x|倍)|ˣ²|ˣ³|ˣ⁴|ˣ⁵|ˣ¹⁰)/i,
-  rurekey = {
-    GB: /UK/g,
-    "B-G-P": /BGP/g,
-    "Russia Moscow": /Moscow/g,
-    "Korea Chuncheon": /Chuncheon|Seoul/g,
-    "Hong Kong": /Hongkong|HONG KONG/gi,
-    "United Kingdom London": /London|Great Britain/g,
-    "Dubai United Arab Emirates": /United Arab Emirates/g,
-    "Taiwan TW 台湾 🇹🇼": /(台|Tai\s?wan|TW).*?🇨🇳|🇨🇳.*?(台|Tai\s?wan|TW)/g,
-    "United States": /USA|Los Angeles|San Jose|Silicon Valley|Michigan/g,
-    澳大利亚: /澳洲|墨尔本|悉尼|土澳|(深|沪|呼|京|广|杭)澳/g,
-    香港: /(深|沪|呼|京|广|杭)港(?!.*(I|线))/g,
-    日本: /(深|沪|呼|京|广|杭|中|辽)日(?!.*(I|线))|东京|大坂/g,
-    新加坡: /狮城|(深|沪|呼|京|广|杭)新/g,
-    美国: /(深|沪|呼|京|广|杭)美|波特兰|芝加哥|哥伦布|纽约|硅谷|俄勒冈|西雅图|芝加哥/g,
-    波斯尼亚和黑塞哥维那: /波黑共和国/g,
-    印尼: /印度尼西亚|雅加达/g,
-    印度: /孟买/g,
-    阿联酋: /迪拜|阿拉伯联合酋长国/g,
-    孟加拉国: /孟加拉/g,
-    捷克: /捷克共和国/g,
-    台湾: /新台|新北|台(?!.*线)/g,
-    Taiwan: /Taipei/g,
-    韩国: /春川|韩|首尔/g,
-    Japan: /Tokyo|Osaka/g,
-    英国: /伦敦/g,
-    India: /Mumbai/g,
-    Switzerland: /Zurich/g,
-    俄罗斯: /莫斯科/g,
-    土耳其: /伊斯坦布尔/g,
-    泰国: /泰國|曼谷/g,
-    法国: /巴黎/g,
-    G: /\d\s?GB/gi,
-    Esnc: /ESNC/gi,
-  };
+  rureRegExp = [
+    /泰/,
+    /俄/,
+    /欧/,
+    /澳/,
+    /法/,
+    /德/,
+    /韩|Korea/,
+    /台/,
+    /美/,
+    /坡|新/,
+    /日/,
+    /港/,
+    /伊斯坦布尔/,
+    /泰國|曼谷/,
+    /Zurich|苏黎世/,
+    /Moscow|莫斯科/,
+    /印度尼西亚|雅加达/,
+    /Mumbai|孟买/,
+    /波黑共和国/,
+    /孟加拉/,
+    /Dubai|迪拜|阿拉伯联合酋长国/,
+    /澳洲|墨尔本|悉尼|(深|沪|呼|京|广|杭)澳/,
+    /Paris|巴黎/,
+    /UK|London|伦敦|Great Britain/,
+    /(深|沪|呼|京|广|杭)德(?!.*(I|线))|Frankfurt|法兰克福|滬德/,
+    /Amsterdam|阿姆斯特丹/,
+    /Chuncheon|春川|Seoul|首尔/,
+    /🇹🇼|新台|新北|台(?!.*线)/,
+    /USA|Los Angeles|San Jose|Silicon Valley|Michigan|(深|沪|呼|京|广|杭)美|波特兰|芝加哥|哥伦布|纽约|硅谷|俄勒冈|西雅图|芝加哥/,
+    /狮城|(深|沪|呼|京|广|杭)新/,
+    /Tokyo|Shinagawa|Osaka|东京|品川|大坂|(深|沪|呼|京|广|杭|中|辽)日(?!.*(I|线))/,
+    /HongKong|(深|沪|呼|京|广|杭)港(?!.*(I|线))/,
+  ],
+  rureValue = [
+    158, 137, 12, 10, 9, 7, 5, 4, 3, 2, 1, 0, 163, 158, 154, 137, 80, 79, 30,
+    23, 13, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
+  ];
 
 function operator(proxies) {
-  const allMap = {};
-  switch (inArg.in) {
-    case "flag":
-      inCountry = flag;
-      break;
-    case "en":
-      inCountry = en;
-      break;
-    case "zh":
-      inCountry = zh;
-      break;
-    case "abbr":
-      inCountry = abbr;
-      break;
-    default:
-      inCountry = [flag, en, zh, abbr];
-  }
   switch (inArg.out) {
     case "flag":
       outCountry = flag;
@@ -1047,30 +1037,25 @@ function operator(proxies) {
     default:
       outCountry = abbr;
   }
-  inCountry.forEach((arr) =>
-    arr.forEach((value, index) => (allMap[value] = outCountry[index]))
-  );
   if (clear) proxies = proxies.filter((proxy) => !nameclear.test(proxy.name));
   if (nx) proxies = proxies.filter((proxy) => !namenx.test(proxy.name));
   if (blnx) proxies = proxies.filter((proxy) => nameblnx.test(proxy.name));
+  let i;
   if (addflag) {
     for (const proxy of proxies) {
       const nameBak = proxy.name;
-      let nameCache = nameBak;
-      for (const [rk, reg] of Object.entries(rurekey))
-        nameCache = nameCache.replace(reg, rk);
       let retainKeys = [];
       if (blgd) {
-        for (let i = 0; i < regexArray1.length; i++)
-          if (regexArray1[i].test(nameBak)) retainKeys.push(valueArray1[i]);
-        for (let i = 0; i < 7; i++)
-          if (regexArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
-          else if (regexArray2b[i].test(nameBak))
+        for (i = 0; i < regexpArray1.length; i++)
+          if (regexpArray1[i].test(nameBak)) retainKeys.push(valueArray1[i]);
+        for (i = 0; i < 7; i++)
+          if (regexpArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
+          else if (regexpArray2b[i].test(nameBak))
             retainKeys.push(valueArray2[i]);
         if (/萌凛云|OWO/i.test(nameBak)) retainKeys.push("OwOCloud");
-        for (let i = 7; i < regexArray2.length; i++)
-          if (regexArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
-          else if (regexArray2b[i].test(nameBak))
+        for (; i < regexpArray2.length; i++)
+          if (regexpArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
+          else if (regexpArray2b[i].test(nameBak))
             retainKeys.push(valueArray2[i]);
       }
       if (BLKEY)
@@ -1093,77 +1078,65 @@ function operator(proxies) {
           rev !== "1" && (ikey = rev + "×");
         }
       }
-      const keyVal =
-        Object.entries(allMap).find(([k]) => nameCache.includes(k))?.[1] ||
-        ((m = nameCache.match(/[澳德港日新坡美台韩俄泰法]/))
-          ? {
-              澳: "AU",
-              德: "DE",
-              港: "HK",
-              日: "JP",
-              坡: "SG",
-              美: "US",
-              台: "TW",
-              韩: "KR",
-              俄: "RU",
-              泰: "TH",
-              法: "FR",
-            }[m[0]]
-          : null);
-      if (keyVal) {
-        const idx = outCountry.indexOf(keyVal);
-        if (idx == -1)
-          proxy.name = [FNAME, keyVal, retainKeys.join(FGF), ikey]
+      for (i = 0; i < 190; i++) {
+        if (nameBak.includes(flag[i])) break;
+        if (nameBak.includes(en[i])) break;
+        if (nameBak.includes(zh[i])) break;
+      }
+      if (i == 190)
+        for (i = 0; i < 190; i++) if (/\b${abbr[i]}\b/.test(nameBak)) break;
+      if (i == 190)
+        for (i = rureValue.length; i--; )
+          if (rureRegExp[i].test(nameBak)) {
+            i = rureValue[i];
+            break;
+          }
+      if (i != -1) {
+        if (nf)
+          proxy.name = [
+            FNAME,
+            flag[i],
+            i == 12 ? outCountry[i] + " BGP" : outCountry[i],
+            retainKeys.join(FGF),
+            ikey,
+          ]
             .filter(Boolean)
             .join(FGF);
-        else {
-          if (nf)
-            proxy.name = [
-              FNAME,
-              flag[idx] === "🇹🇼" ? "🇨🇳" : flag[idx],
-              keyVal,
-              retainKeys.join(FGF),
-              ikey,
-            ]
-              .filter(Boolean)
-              .join(FGF);
-          else
-            proxy.name = [
-              flag[idx] === "🇹🇼" ? "🇨🇳" : flag[idx],
-              FNAME,
-              keyVal,
-              retainKeys.join(FGF),
-              ikey,
-            ]
-              .filter(Boolean)
-              .join(FGF);
-        }
+        else
+          proxy.name = [
+            flag[i],
+            FNAME,
+            i == 12 ? outCountry[i] + " BGP" : outCountry[i],
+            retainKeys.join(FGF),
+            ikey,
+          ]
+            .filter(Boolean)
+            .join(FGF);
       } else proxy.name = nm ? FNAME + nameBak : null;
     }
   } else {
     for (const proxy of proxies) {
       const nameBak = proxy.name;
-      let nameCache = nameBak;
-      for (const [rk, reg] of Object.entries(rurekey))
-        nameCache = nameCache.replace(reg, rk);
       let retainKeys = [];
       if (blgd) {
-        for (let i = 0; i < regexArray1.length; i++)
-          if (regexArray1[i].test(nameBak)) retainKeys.push(valueArray1[i]);
-        for (let i = 0; i < 7; i++)
-          if (regexArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
-          else if (regexArray2b[i].test(nameBak))
+        for (i = 0; i < regexpArray1.length; i++)
+          if (regexpArray1[i].test(nameBak)) retainKeys.push(valueArray1[i]);
+        for (i = 0; i < 7; i++)
+          if (regexpArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
+          else if (regexpArray2b[i].test(nameBak))
             retainKeys.push(valueArray2[i]);
         if (/萌凛云|OWO/i.test(nameBak)) retainKeys.push("OwOCloud");
-        for (let i = 7; i < regexArray2.length; i++)
-          if (regexArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
-          else if (regexArray2b[i].test(nameBak))
+        for (; i < regexpArray2.length; i++)
+          if (regexpArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
+          else if (regexpArray2b[i].test(nameBak))
             retainKeys.push(valueArray2[i]);
       }
       if (BLKEY)
         for (const k of BLKEY.split("+")) {
           const part = k.split(">");
-          if (nameBak.includes(part[0])) retainKeys.push(part[1] || part[0]);
+          if (part[1]) {
+            if (nameBak.includes(part[0])) retainKeys.push(part[1]);
+          } else if (nameBak.includes(k)) retainKeys.push(k);
         }
       proxy["block-quic"] = /^(on|off)$/.test(blockquic)
         ? blockquic
@@ -1178,25 +1151,26 @@ function operator(proxies) {
           rev !== "1" && (ikey = rev + "×");
         }
       }
-      const keyVal =
-        Object.entries(allMap).find(([k]) => nameCache.includes(k))?.[1] ||
-        ((m = nameCache.match(/[澳德俄泰法]/))
-          ? {
-              澳: "AU",
-              德: "DE",
-              港: "HK",
-              日: "JP",
-              坡: "SG",
-              美: "US",
-              台: "TW",
-              韩: "KR",
-              俄: "RU",
-              泰: "TH",
-              法: "FR",
-            }[m[0]]
-          : null);
-      if (keyVal)
-        proxy.name = [FNAME, keyVal, retainKeys.join(FGF), ikey]
+      for (i = 0; i < 190; i++) {
+        if (nameBak.includes(flag[i])) break;
+        if (nameBak.includes(en[i])) break;
+        if (nameBak.includes(zh[i])) break;
+      }
+      if (i == 190)
+        for (i = 0; i < 190; i++) if (/\b${abbr[i]}\b/.test(nameBak)) break;
+      if (i == 190)
+        for (i = rureValue.length; i--; )
+          if (rureRegExp[i].test(nameBak)) {
+            i = rureValue[i];
+            break;
+          }
+      if (i != -1)
+        proxy.name = [
+          FNAME,
+          i == 12 ? outCountry[i] + " BGP" : outCountry[i],
+          retainKeys.join(FGF),
+          ikey,
+        ]
           .filter(Boolean)
           .join(FGF);
       else proxy.name = nm ? FNAME + nameBak : null;
