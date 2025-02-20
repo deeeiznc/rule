@@ -1125,7 +1125,7 @@ function operator(proxies) {
           proxy.name = [
             FNAME,
             flag[i],
-            i == 12 ? outCountry[i] + " BGP" : outCountry[i],
+            i == 12 ? outCountry[i] + "-BGP" : outCountry[i],
             retainKeys.join(FGF),
             ikey,
           ]
@@ -1135,7 +1135,7 @@ function operator(proxies) {
           proxy.name = [
             flag[i],
             FNAME,
-            i == 12 ? outCountry[i] + " BGP" : outCountry[i],
+            i == 12 ? outCountry[i] + "-BGP" : outCountry[i],
             retainKeys.join(FGF),
             ikey,
           ]
@@ -1229,7 +1229,7 @@ function operator(proxies) {
       if (i != -1)
         proxy.name = [
           FNAME,
-          i == 12 ? outCountry[i] + " BGP" : outCountry[i],
+          i == 12 ? outCountry[i] + "-BGP" : outCountry[i],
           retainKeys.join(FGF),
           ikey,
         ]
