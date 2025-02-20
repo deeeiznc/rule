@@ -991,7 +991,6 @@ const specialRegex = [
     "Taiwan TW 台湾 🇹🇼": /(台|Tai\s?wan|TW).*?🇨🇳|🇨🇳.*?(台|Tai\s?wan|TW)/g,
     "United States": /USA|Los Angeles|San Jose|Silicon Valley|Michigan/g,
     澳大利亚: /澳洲|墨尔本|悉尼|土澳|(深|沪|呼|京|广|杭)澳/g,
-    德国: /(深|沪|呼|京|广|杭)德(?!.*(I|线))|法兰克福|滬德/g,
     香港: /(深|沪|呼|京|广|杭)港(?!.*(I|线))/g,
     日本: /(深|沪|呼|京|广|杭|中|辽)日(?!.*(I|线))|东京|大坂/g,
     新加坡: /狮城|(深|沪|呼|京|广|杭)新/g,
@@ -1008,7 +1007,6 @@ const specialRegex = [
     Japan: /Tokyo|Osaka/g,
     英国: /伦敦/g,
     India: /Mumbai/g,
-    Germany: /Frankfurt/g,
     Switzerland: /Zurich/g,
     俄罗斯: /莫斯科/g,
     土耳其: /伊斯坦布尔/g,
@@ -1182,7 +1180,7 @@ function operator(proxies) {
       }
       const keyVal =
         Object.entries(allMap).find(([k]) => nameCache.includes(k))?.[1] ||
-        ((m = nameCache.match(/[澳德港日新坡美台韩俄泰法]/))
+        ((m = nameCache.match(/[澳德俄泰法]/))
           ? {
               澳: "AU",
               德: "DE",
