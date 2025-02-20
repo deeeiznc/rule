@@ -1015,6 +1015,9 @@ function operator(proxies) {
       for (const [rk, reg] of Object.entries(rurekey))
         nameCache = nameCache.replace(reg, rk);
       let retainKeys = [];
+      if (blgd)
+        for (let i = 0; i < regexArray.length; i++)
+          if (regexArray[i].test(nameBak)) retainKeys.push(valueArray[i]);
       if (BLKEY)
         for (const k of BLKEY.split("+")) {
           const part = k.split(">");
@@ -1025,11 +1028,7 @@ function operator(proxies) {
       proxy["block-quic"] = /^(on|off)$/.test(blockquic)
         ? blockquic
         : (delete proxy["block-quic"], undefined);
-      let ikey = "",
-        ikeys = "";
-      if (blgd)
-        for (let i = 0; i < regexArray.length; i++)
-          regexArray[i].test(nameBak) && (ikeys = valueArray[i]);
+      let ikey = "";
       if (bl) {
         const m = nameBak.match(
           /(?:倍率|[Xx×])\D?((?:\d{1,3}\.)?\d+)|((?:\d{1,3}\.)?\d+)(?:倍|[Xx×])/
@@ -1059,7 +1058,7 @@ function operator(proxies) {
       if (keyVal) {
         const idx = outCountry.indexOf(keyVal);
         if (idx == -1)
-          proxy.name = [FNAME, keyVal, retainKeys.join(FGF), ikey, ikeys]
+          proxy.name = [FNAME, keyVal, retainKeys.join(FGF), ikey]
             .filter(Boolean)
             .join(FGF);
         else {
@@ -1070,7 +1069,6 @@ function operator(proxies) {
               keyVal,
               retainKeys.join(FGF),
               ikey,
-              ikeys,
             ]
               .filter(Boolean)
               .join(FGF);
@@ -1081,7 +1079,6 @@ function operator(proxies) {
               keyVal,
               retainKeys.join(FGF),
               ikey,
-              ikeys,
             ]
               .filter(Boolean)
               .join(FGF);
@@ -1095,6 +1092,9 @@ function operator(proxies) {
       for (const [rk, reg] of Object.entries(rurekey))
         nameCache = nameCache.replace(reg, rk);
       let retainKeys = [];
+      if (blgd)
+        for (let i = 0; i < regexArray.length; i++)
+          if (regexArray[i].test(nameBak)) retainKeys.push(valueArray[i]);
       if (BLKEY)
         for (const k of BLKEY.split("+")) {
           const part = k.split(">");
@@ -1103,11 +1103,7 @@ function operator(proxies) {
       proxy["block-quic"] = /^(on|off)$/.test(blockquic)
         ? blockquic
         : (delete proxy["block-quic"], undefined);
-      let ikey = "",
-        ikeys = "";
-      if (blgd)
-        for (let i = 0; i < regexArray.length; i++)
-          regexArray[i].test(nameBak) && (ikeys = valueArray[i]);
+      let ikey = "";
       if (bl) {
         const m = nameBak.match(
           /(?:倍率|[Xx×])\D?((?:\d{1,3}\.)?\d+)|((?:\d{1,3}\.)?\d+)(?:倍|[Xx×])/
@@ -1135,7 +1131,7 @@ function operator(proxies) {
             }[m[0]]
           : null);
       if (keyVal)
-        proxy.name = [FNAME, keyVal, retainKeys.join(FGF), ikey, ikeys]
+        proxy.name = [FNAME, keyVal, retainKeys.join(FGF), ikey]
           .filter(Boolean)
           .join(FGF);
       else proxy.name = nm ? FNAME + nameBak : null;
