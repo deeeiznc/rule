@@ -1065,13 +1065,12 @@ function operator(proxies) {
       if (blgd) {
         for (let i = 0; i < regexArray1.length; i++)
           if (regexArray1[i].test(nameBak)) retainKeys.push(valueArray1[i]);
-        let i = 0;
-        for (i < 7; i++)
+        for (let i = 0; i < 7; i++)
           if (regexArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
           else if (regexArray2b[i].test(nameBak))
             retainKeys.push(valueArray2[i]);
         if (/萌凛云|OWO/i.test(nameBak)) retainKeys.push("OwOCloud");
-        for (i < regexArray2.length; i++)
+        for (let i = 7; i < regexArray2.length; i++)
           if (regexArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
           else if (regexArray2b[i].test(nameBak))
             retainKeys.push(valueArray2[i]);
@@ -1153,13 +1152,12 @@ function operator(proxies) {
       if (blgd) {
         for (let i = 0; i < regexArray1.length; i++)
           if (regexArray1[i].test(nameBak)) retainKeys.push(valueArray1[i]);
-        let i = 0;
-        for (i < 7; i++)
+        for (let i = 0; i < 7; i++)
           if (regexArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
           else if (regexArray2b[i].test(nameBak))
             retainKeys.push(valueArray2[i]);
         if (/萌凛云|OWO/i.test(nameBak)) retainKeys.push("OwOCloud");
-        for (i < regexArray2.length; i++)
+        for (let i = 7; i < regexArray2.length; i++)
           if (regexArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
           else if (regexArray2b[i].test(nameBak))
             retainKeys.push(valueArray2[i]);
