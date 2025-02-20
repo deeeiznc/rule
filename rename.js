@@ -862,7 +862,6 @@ const specialRegex = [
     /北京|BEIJING/i,
     /宁波|NINGBO/i,
     /杭州|HANGZHOU/i,
-    /萌凛云|OWO/i,
     /唯一|唯云|WEIYI|WEIYUN|WCLOUD/i,
     /优刻得|UCLOUD/i,
     /腾讯|TENCENT/i,
@@ -884,7 +883,6 @@ const specialRegex = [
     /\bBJ|BJ\b/,
     /\bNB|NB\b/,
     /\bHZ|HZ\b/,
-    / /,
     /\bWY|WY\b/,
     /\bUDPN|UDPN\b/,
     /\bTX|TX\b/,
@@ -968,7 +966,6 @@ const specialRegex = [
     "BJ",
     "NB",
     "HZ",
-    "OwOCloud",
     "WCloud",
     "UCloud",
     "Tencent",
@@ -1068,7 +1065,13 @@ function operator(proxies) {
       if (blgd) {
         for (let i = 0; i < regexArray1.length; i++)
           if (regexArray1[i].test(nameBak)) retainKeys.push(valueArray1[i]);
-        for (let i = 0; i < regexArray2.length; i++)
+        let i = 0;
+        for (i < 7; i++)
+          if (regexArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
+          else if (regexArray2b[i].test(nameBak))
+            retainKeys.push(valueArray2[i]);
+        if (/萌凛云|OWO/i.test(nameBak)) retainKeys.push("OwOCloud");
+        for (i < regexArray2.length; i++)
           if (regexArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
           else if (regexArray2b[i].test(nameBak))
             retainKeys.push(valueArray2[i]);
@@ -1150,7 +1153,13 @@ function operator(proxies) {
       if (blgd) {
         for (let i = 0; i < regexArray1.length; i++)
           if (regexArray1[i].test(nameBak)) retainKeys.push(valueArray1[i]);
-        for (let i = 0; i < regexArray2.length; i++)
+        let i = 0;
+        for (i < 7; i++)
+          if (regexArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
+          else if (regexArray2b[i].test(nameBak))
+            retainKeys.push(valueArray2[i]);
+        if (/萌凛云|OWO/i.test(nameBak)) retainKeys.push("OwOCloud");
+        for (i < regexArray2.length; i++)
           if (regexArray2[i].test(nameBak)) retainKeys.push(valueArray2[i]);
           else if (regexArray2b[i].test(nameBak))
             retainKeys.push(valueArray2[i]);
