@@ -10,15 +10,13 @@ const inArg = $arguments,
     blgd = false,
     blpx = false,
     blnx = false,
-    debug = false,
     clear = false,
     nm = false,
     flag: addflag = false,
   } = inArg,
   FGF = decodeURI(inArg.fgf ?? " "),
   FNAME = decodeURI(inArg.name ?? ""),
-  BLKEY = decodeURI(inArg.blkey ?? ""),
-  blockquic = decodeURI(inArg.blockquic ?? "");
+  BLKEY = decodeURI(inArg.blkey ?? "");
 
 const abbr = [
     "HK",
@@ -789,39 +787,43 @@ const abbr = [
     "🇹🇱",
   ];
 
-const specialRegexp = [
-    /(\d\.)?\d+×/,
-    /Biz|Home|DC1|DC2|DC3|DC4|DC5|Emby|Game|Shop|GooglePlay|Pornhub/,
+const regexpxUse = [
+    /Home/,
+    /Emby/,
+    /Netflix|Pornhub/,
+    /Biz|DC1|DC2|DC3|DC4|DC5|Game|Shop|GooglePlay/,
   ],
   nameclear =
     /套餐|到期|有效|剩余|版本|已用|过期|失联|测试|官方|网址|备用|群|客服|网站|获取|订阅|流量|机场|下次|官址|联系|邮箱|工单|学术|文档|USE|TOTAL|EXPIRE|EMAIL|TRAFFIC|\d\s?[GTM](?:[^AC-Z0-9]|$)/i,
   regexpUse = [
-    /商宽|BUSINESS|BIZ/i,
     /家宽|HOME|\bHO\b/i,
+    /EMBY/i,
+    /NETFLIX|奈飞|网飞/i,
+    /PORNHUB/i,
+    /商宽|BUSINESS|BIZ/i,
     /DC1/,
     /DC2/,
     /DC3/,
     /DC4/,
     /DC5/,
-    /EMBY/i,
     /游戏|GAME/i,
     /购物|SHOP/i,
-    /GOOGLE PLAY|GOOGLEPLAY/i,
-    /PORNHUB/i,
+    /GOOGLE PLAY|GOOGLEPLAY|Play 商店/i,
   ],
   valueUse = [
-    "Biz",
     "Home",
+    "Emby",
+    "Netflix",
+    "Pornhub",
+    "Biz",
     "DC1",
     "DC2",
     "DC3",
     "DC4",
     "DC5",
-    "Emby",
     "Game",
     "Shop",
     "GooglePlay",
-    "Pornhub",
   ],
   regexpLanding1 = [
     /\bEONS\b/i,
@@ -1036,219 +1038,199 @@ function operator(proxies) {
   if (clear) proxies = proxies.filter((proxy) => !nameclear.test(proxy.name));
   if (nx) proxies = proxies.filter((proxy) => !namenx.test(proxy.name));
   if (blnx) proxies = proxies.filter((proxy) => nameblnx.test(proxy.name));
-  let i;
+  let geoi, i;
   if (addflag)
-    proxies = proxies.filter((proxy) => {
+    return proxies.filter((proxy) => {
       const pname = proxy.name;
-      let retainKeys = [];
-      if (blgd) {
-        for (i = 0; i < regexpUse.length; i++)
-          if (regexpUse[i].test(pname)) retainKeys.push(valueUse[i]);
-        for (i = 0; i < regexpLanding1.length; i++)
-          if (regexpLanding1[i].test(pname)) {
-            retainKeys.push(valueLanding1[i]);
-            break;
-          }
-        if (i == regexpLanding1.length)
-          for (i = 0; i < regexpLanding2.length; i++)
-            if (
-              regexpLanding2[i].test(pname) ||
-              regexpLanding2b[i].test(pname)
-            ) {
-              retainKeys.push(valueLanding2[i]);
+      for (geoi = 0; geoi < 190; geoi++) {
+        if (pname.includes(flag[geoi])) break;
+        if (pname.includes(en[geoi])) break;
+        if (pname.includes(zh[geoi])) break;
+      }
+      if (geoi == 190) {
+        for (geoi = 0; geoi < 190; geoi++)
+          if (/\b${abbr[geoi]}\b/.test(pname)) break;
+        if (geoi == 190)
+          for (geoi = rureValue.length; geoi--; )
+            if (rureRegExp[geoi].test(pname)) {
+              geoi = rureValue[geoi];
               break;
             }
-        for (i = 0; i < regexpEntryRegion.length; i++)
-          if (
-            regexpEntryRegion[i].test(pname) ||
-            regexpEntryRegionb[i].test(pname)
-          ) {
-            retainKeys.push(valueEntryRegion[i]);
-            break;
-          }
-        for (i = 0; i < regexpEntryCloud1.length; i++)
-          if (regexpEntryCloud1[i].test(pname)) {
-            retainKeys.push(valueEntryCloud1[i]);
-            break;
-          }
-        if (i == regexpEntryCloud1.length)
-          for (i = 0; i < regexpEntryCloud2.length; i++)
-            if (
-              regexpEntryCloud2[i].test(pname) ||
-              regexpEntryCloud2b[i].test(pname)
-            ) {
-              retainKeys.push(valueEntryCloud2[i]);
-              break;
-            }
-        for (i = 0; i < regexpEntryISP.length; i++)
-          if (regexpEntryISP[i].test(pname) || regexpEntryISPb[i].test(pname))
-            retainKeys.push(valueEntryISP[i]);
       }
-      for (const k of BLKEY.split("+")) {
-        const part = k.split(">");
-        if (part[1]) {
-          if (pname.includes(part[0])) retainKeys.push(part[1]);
-        } else if (pname.includes(k)) retainKeys.push(k);
-      }
-      proxy["block-quic"] = /^(on|off)$/.test(blockquic)
-        ? blockquic
-        : (delete proxy["block-quic"], undefined);
-      let ratioKey = "";
-      if (bl) {
-        const m = pname.match(
-          /(?:倍率|[Xx×])\D?((?:\d{1,3}\.)?\d+)|((?:\d{1,3}\.)?\d+)(?:倍|[Xx×])/
-        );
-        if (m) {
-          const ratio = m[1] || m[2];
-          if (ratio !== "1") ratioKey = ratio + "×";
-        }
-      }
-      for (i = 0; i < 190; i++) {
-        if (pname.includes(flag[i])) break;
-        if (pname.includes(en[i])) break;
-        if (pname.includes(zh[i])) break;
-      }
-      if (i == 190) {
-        for (i = 0; i < 190; i++) if (/\b${abbr[i]}\b/.test(pname)) break;
-        if (i == 190) {
-          for (i = rureValue.length; i--; )
-            if (rureRegExp[i].test(pname)) {
-              i = rureValue[i];
-              break;
-            }
-          if (i == -1)
-            for (i = 0; i < 190; i++) if (pname.includes(abbr[i])) break;
-        }
-      }
-      if (i == 190) {
+      if (geoi == -1) {
         if (nm) return (proxy.name = FNAME + pname);
-      } else if (nf)
-        return (proxy.name = [
-          FNAME,
-          flag[i],
-          i == 12 ? outCountry[i] + "-BGP" : outCountry[i],
-          retainKeys.join(FGF),
-          ratioKey,
-        ]
-          .filter(Boolean)
-          .join(FGF));
-      else
-        return (proxy.name = [
-          flag[i],
-          FNAME,
-          i == 12 ? outCountry[i] + "-BGP" : outCountry[i],
-          retainKeys.join(FGF),
-          ratioKey,
-        ]
-          .filter(Boolean)
-          .join(FGF));
+      } else {
+        let retainKeys = [];
+        if (blgd) {
+          for (i = 0; i < regexpUse.length; i++)
+            if (regexpUse[i].test(pname)) retainKeys.push(valueUse[i]);
+          for (i = 0; i < regexpLanding1.length; i++)
+            if (regexpLanding1[i].test(pname)) {
+              retainKeys.push(valueLanding1[i]);
+              break;
+            }
+          if (i == regexpLanding1.length)
+            for (i = 0; i < regexpLanding2.length; i++)
+              if (
+                regexpLanding2[i].test(pname) ||
+                regexpLanding2b[i].test(pname)
+              ) {
+                retainKeys.push(valueLanding2[i]);
+                break;
+              }
+          for (i = 0; i < regexpEntryRegion.length; i++)
+            if (
+              regexpEntryRegion[i].test(pname) ||
+              regexpEntryRegionb[i].test(pname)
+            ) {
+              retainKeys.push(valueEntryRegion[i]);
+              break;
+            }
+          for (i = 0; i < regexpEntryCloud1.length; i++)
+            if (regexpEntryCloud1[i].test(pname)) {
+              retainKeys.push(valueEntryCloud1[i]);
+              break;
+            }
+          if (i == regexpEntryCloud1.length)
+            for (i = 0; i < regexpEntryCloud2.length; i++)
+              if (
+                regexpEntryCloud2[i].test(pname) ||
+                regexpEntryCloud2b[i].test(pname)
+              ) {
+                retainKeys.push(valueEntryCloud2[i]);
+                break;
+              }
+          for (i = 0; i < regexpEntryISP.length; i++)
+            if (regexpEntryISP[i].test(pname) || regexpEntryISPb[i].test(pname))
+              retainKeys.push(valueEntryISP[i]);
+        }
+        for (const k of BLKEY.split("+")) {
+          const part = k.split(">");
+          if (part[1]) {
+            if (pname.includes(part[0])) retainKeys.push(part[1]);
+          } else if (pname.includes(k)) retainKeys.push(k);
+        }
+        let ratioKey = "";
+        if (bl) {
+          const m = pname.match(
+            /(?:倍率|[Xx×])\D?((?:\d{1,3}\.)?\d+)|((?:\d{1,3}\.)?\d+)(?:倍|[Xx×])/
+          );
+          if (m) {
+            const ratio = m[1] || m[2];
+            if (ratio !== "1") ratioKey = ratio + "×";
+          }
+        }
+        if (nf)
+          return (proxy.name = [
+            FNAME,
+            flag[geoi],
+            geoi == 12 ? outCountry[geoi] + "-BGP" : outCountry[geoi],
+            retainKeys.join(FGF),
+            ratioKey,
+          ]
+            .filter(Boolean)
+            .join(FGF));
+        else
+          return (proxy.name = [
+            flag[geoi],
+            FNAME,
+            geoi == 12 ? outCountry[geoi] + "-BGP" : outCountry[geoi],
+            retainKeys.join(FGF),
+            ratioKey,
+          ]
+            .filter(Boolean)
+            .join(FGF));
+      }
     });
   else
-    proxies = proxies.filter((proxy) => {
+    return proxies.filter((proxy) => {
       const pname = proxy.name;
-      let retainKeys = [];
-      if (blgd) {
-        for (i = 0; i < regexpUse.length; i++)
-          if (regexpUse[i].test(pname)) retainKeys.push(valueUse[i]);
-        for (i = 0; i < regexpLanding1.length; i++)
-          if (regexpLanding1[i].test(pname)) {
-            retainKeys.push(valueLanding1[i]);
-            break;
-          }
-        if (i == regexpLanding1.length)
-          for (i = 0; i < regexpLanding2.length; i++)
-            if (
-              regexpLanding2[i].test(pname) ||
-              regexpLanding2b[i].test(pname)
-            ) {
-              retainKeys.push(valueLanding2[i]);
+      for (geoi = 0; geoi < 190; geoi++) {
+        if (pname.includes(flag[geoi])) break;
+        if (pname.includes(en[geoi])) break;
+        if (pname.includes(zh[geoi])) break;
+      }
+      if (geoi == 190) {
+        for (geoi = 0; geoi < 190; geoi++)
+          if (/\b${abbr[geoi]}\b/.test(pname)) break;
+        if (geoi == 190)
+          for (geoi = rureValue.length; geoi--; )
+            if (rureRegExp[geoi].test(pname)) {
+              geoi = rureValue[geoi];
               break;
             }
-        for (i = 0; i < regexpEntryRegion.length; i++)
-          if (
-            regexpEntryRegion[i].test(pname) ||
-            regexpEntryRegionb[i].test(pname)
-          ) {
-            retainKeys.push(valueEntryRegion[i]);
-            break;
-          }
-        for (i = 0; i < regexpEntryCloud1.length; i++)
-          if (regexpEntryCloud1[i].test(pname)) {
-            retainKeys.push(valueEntryCloud1[i]);
-            break;
-          }
-        if (i == regexpEntryCloud1.length)
-          for (i = 0; i < regexpEntryCloud2.length; i++)
-            if (
-              regexpEntryCloud2[i].test(pname) ||
-              regexpEntryCloud2b[i].test(pname)
-            ) {
-              retainKeys.push(valueEntryCloud2[i]);
-              break;
-            }
-        for (i = 0; i < regexpEntryISP.length; i++)
-          if (regexpEntryISP[i].test(pname) || regexpEntryISPb[i].test(pname))
-            retainKeys.push(valueEntryISP[i]);
       }
-      for (const k of BLKEY.split("+")) {
-        const part = k.split(">");
-        if (part[1]) {
-          if (pname.includes(part[0])) retainKeys.push(part[1]);
-        } else if (pname.includes(k)) retainKeys.push(k);
-      }
-      proxy["block-quic"] = /^(on|off)$/.test(blockquic)
-        ? blockquic
-        : (delete proxy["block-quic"], undefined);
-      let ratioKey = "";
-      if (bl) {
-        const m = pname.match(
-          /(?:倍率|[Xx×])\D?((?:\d{1,3}\.)?\d+)|((?:\d{1,3}\.)?\d+)(?:倍|[Xx×])/
-        );
-        if (m) {
-          const ratio = m[1] || m[2];
-          if (ratio !== "1") ratioKey = ratio + "×";
-        }
-      }
-      for (i = 0; i < 190; i++) {
-        if (pname.includes(flag[i])) break;
-        if (pname.includes(en[i])) break;
-        if (pname.includes(zh[i])) break;
-      }
-      if (i == 190) {
-        for (i = 0; i < 190; i++) if (/\b${abbr[i]}\b/.test(pname)) break;
-        if (i == 190) {
-          for (i = rureValue.length; i--; )
-            if (rureRegExp[i].test(pname)) {
-              i = rureValue[i];
-              break;
-            }
-          if (i == -1)
-            for (i = 0; i < 190; i++) if (pname.includes(abbr[i])) break;
-        }
-      }
-      if (i == 190) {
+      if (geoi == -1) {
         if (nm) return (proxy.name = FNAME + pname);
-      } else
+      } else {
+        let retainKeys = [];
+        if (blgd) {
+          for (i = 0; i < regexpUse.length; i++)
+            if (regexpUse[i].test(pname)) retainKeys.push(valueUse[i]);
+          for (i = 0; i < regexpLanding1.length; i++)
+            if (regexpLanding1[i].test(pname)) {
+              retainKeys.push(valueLanding1[i]);
+              break;
+            }
+          if (i == regexpLanding1.length)
+            for (i = 0; i < regexpLanding2.length; i++)
+              if (
+                regexpLanding2[i].test(pname) ||
+                regexpLanding2b[i].test(pname)
+              ) {
+                retainKeys.push(valueLanding2[i]);
+                break;
+              }
+          for (i = 0; i < regexpEntryRegion.length; i++)
+            if (
+              regexpEntryRegion[i].test(pname) ||
+              regexpEntryRegionb[i].test(pname)
+            ) {
+              retainKeys.push(valueEntryRegion[i]);
+              break;
+            }
+          for (i = 0; i < regexpEntryCloud1.length; i++)
+            if (regexpEntryCloud1[i].test(pname)) {
+              retainKeys.push(valueEntryCloud1[i]);
+              break;
+            }
+          if (i == regexpEntryCloud1.length)
+            for (i = 0; i < regexpEntryCloud2.length; i++)
+              if (
+                regexpEntryCloud2[i].test(pname) ||
+                regexpEntryCloud2b[i].test(pname)
+              ) {
+                retainKeys.push(valueEntryCloud2[i]);
+                break;
+              }
+          for (i = 0; i < regexpEntryISP.length; i++)
+            if (regexpEntryISP[i].test(pname) || regexpEntryISPb[i].test(pname))
+              retainKeys.push(valueEntryISP[i]);
+        }
+        for (const k of BLKEY.split("+")) {
+          const part = k.split(">");
+          if (part[1]) {
+            if (pname.includes(part[0])) retainKeys.push(part[1]);
+          } else if (pname.includes(k)) retainKeys.push(k);
+        }
+        let ratioKey = "";
+        if (bl) {
+          const m = pname.match(
+            /(?:倍率|[Xx×])\D?((?:\d{1,3}\.)?\d+)|((?:\d{1,3}\.)?\d+)(?:倍|[Xx×])/
+          );
+          if (m) {
+            const ratio = m[1] || m[2];
+            if (ratio !== "1") ratioKey = ratio + "×";
+          }
+        }
         return (proxy.name = [
           FNAME,
-          i == 12 ? outCountry[i] + "-BGP" : outCountry[i],
+          geoi == 12 ? outCountry[geoi] + "-BGP" : outCountry[geoi],
           retainKeys.join(FGF),
           ratioKey,
         ]
           .filter(Boolean)
           .join(FGF));
+      }
     });
-  if (blpx) {
-    const wis = [],
-      wnout = [];
-    for (let i = 0, x, sp; (x = proxies[i]); i++) {
-      sp = specialRegexp.findIndex((r) => r.test(x.name));
-      if (sp == -1) wnout.push({ x, i });
-      else wis.push({ x, i, sp });
-    }
-    wis.sort((a, b) => a.sp - b.sp || a.x.name.localeCompare(b.x.name));
-    wnout.sort((a, b) => a.i - b.i);
-    return wnout.map((o) => o.x).concat(wis.map((o) => o.x));
-  }
-  return proxies;
 }
