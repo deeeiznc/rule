@@ -1,5 +1,5 @@
 /**
- * Usage: Add a script operation to the Sub-Store
+ * Usage: Add a script operatioKeyn to the Sub-Store
  * Parameter example: #flag&blkey=GPT>new name+NF
  */
 const inArg = $arguments,
@@ -809,7 +809,7 @@ const specialRegex = [
     /GOOGLE PLAY|GOOGLEPLAY/i,
     /PORNHUB/i,
   ],
-  valueUse1 = [
+  valueUse = [
     "Biz",
     "Home",
     "DC1",
@@ -1084,24 +1084,23 @@ function operator(proxies) {
           if (regexpEntryISP[i].test(pname) || regexpEntryISPb[i].test(pname))
             retainKeys.push(valueEntryISP[i]);
       }
-      if (BLKEY)
-        for (const k of BLKEY.split("+")) {
-          const part = k.split(">");
-          if (part[1]) {
-            if (pname.includes(part[0])) retainKeys.push(part[1]);
-          } else if (pname.includes(k)) retainKeys.push(k);
-        }
+      for (const k of BLKEY.split("+")) {
+        const part = k.split(">");
+        if (part[1]) {
+          if (pname.includes(part[0])) retainKeys.push(part[1]);
+        } else if (pname.includes(k)) retainKeys.push(k);
+      }
       proxy["block-quic"] = /^(on|off)$/.test(blockquic)
         ? blockquic
         : (delete proxy["block-quic"], undefined);
-      let ratio = "";
+      let ratioKey = "";
       if (bl) {
         const m = pname.match(
           /(?:倍率|[Xx×])\D?((?:\d{1,3}\.)?\d+)|((?:\d{1,3}\.)?\d+)(?:倍|[Xx×])/
         );
         if (m) {
-          const rev = m[1] || m[2];
-          rev !== "1" && (ratio = rev + "×");
+          const ratio = m[1] || m[2];
+          if (ratio !== "1") ratioKey = ratio + "×";
         }
       }
       for (i = 0; i < 190; i++) {
@@ -1129,7 +1128,7 @@ function operator(proxies) {
           flag[i],
           i == 12 ? outCountry[i] + "-BGP" : outCountry[i],
           retainKeys.join(FGF),
-          ratio,
+          ratioKey,
         ]
           .filter(Boolean)
           .join(FGF));
@@ -1139,7 +1138,7 @@ function operator(proxies) {
           FNAME,
           i == 12 ? outCountry[i] + "-BGP" : outCountry[i],
           retainKeys.join(FGF),
-          ratio,
+          ratioKey,
         ]
           .filter(Boolean)
           .join(FGF));
@@ -1191,24 +1190,23 @@ function operator(proxies) {
           if (regexpEntryISP[i].test(pname) || regexpEntryISPb[i].test(pname))
             retainKeys.push(valueEntryISP[i]);
       }
-      if (BLKEY)
-        for (const k of BLKEY.split("+")) {
-          const part = k.split(">");
-          if (part[1]) {
-            if (pname.includes(part[0])) retainKeys.push(part[1]);
-          } else if (pname.includes(k)) retainKeys.push(k);
-        }
+      for (const k of BLKEY.split("+")) {
+        const part = k.split(">");
+        if (part[1]) {
+          if (pname.includes(part[0])) retainKeys.push(part[1]);
+        } else if (pname.includes(k)) retainKeys.push(k);
+      }
       proxy["block-quic"] = /^(on|off)$/.test(blockquic)
         ? blockquic
         : (delete proxy["block-quic"], undefined);
-      let ratio = "";
+      let ratioKey = "";
       if (bl) {
         const m = pname.match(
           /(?:倍率|[Xx×])\D?((?:\d{1,3}\.)?\d+)|((?:\d{1,3}\.)?\d+)(?:倍|[Xx×])/
         );
         if (m) {
-          const rev = m[1] || m[2];
-          rev !== "1" && (ratio = rev + "×");
+          const ratio = m[1] || m[2];
+          if (ratio !== "1") ratioKey = ratio + "×";
         }
       }
       for (i = 0; i < 190; i++) {
@@ -1235,7 +1233,7 @@ function operator(proxies) {
           FNAME,
           i == 12 ? outCountry[i] + "-BGP" : outCountry[i],
           retainKeys.join(FGF),
-          ratio,
+          ratioKey,
         ]
           .filter(Boolean)
           .join(FGF));
