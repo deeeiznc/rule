@@ -1243,14 +1243,12 @@ function operator(proxies) {
       wnout = [];
     for (let i = 0, x, sp; (x = proxies[i]); i++) {
       sp = specialRegexp.findIndex((r) => r.test(x.name));
-      if (sp != -1) wis.push({ x, i, sp });
-      else wnout.push({ x, i });
+      if (sp == -1) wnout.push({ x, i });
+      else wis.push({ x, i, sp });
     }
     wis.sort((a, b) => a.sp - b.sp || a.x.name.localeCompare(b.x.name));
-    return wnout
-      .sort((a, b) => a.i - b.i)
-      .map((o) => o.x)
-      .concat(wis.map((o) => o.x));
+    wnout.sort((a, b) => a.i - b.i);
+    return wnout.map((o) => o.x).concat(wis.map((o) => o.x));
   }
   return proxies;
 }
