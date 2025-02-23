@@ -1084,12 +1084,13 @@ function operator(proxies) {
       for (i = 0; i < regexpEntryISP.length; i++)
         if (regexpEntryISP[i].test(pname) || regexpEntryISPb[i].test(pname))
           retainKeys.push(valueEntryISP[i]);
-      for (const k of BLKEY.split("+")) {
-        const part = k.split(">");
-        if (part[1]) {
-          if (pname.includes(part[0])) retainKeys.push(part[1]);
-        } else if (pname.includes(k)) retainKeys.push(k);
-      }
+      if (BLKEY)
+        for (const k of BLKEY.split("+")) {
+          const part = k.split(">");
+          if (part[1]) {
+            if (pname.includes(part[0])) retainKeys.push(part[1]);
+          } else if (pname.includes(k)) retainKeys.push(k);
+        }
       return (proxy.name = [
         flag[geoi],
         FNAME,
