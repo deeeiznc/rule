@@ -819,7 +819,7 @@ const regexpxUse = [
     /NEAROUTE/i,
     /\bHKT\b/i,
     /HKBN/i,
-    /I-CABLE/i,
+    /I-?CABLE/i,
     /JINX/i,
     /MISAKA/i,
     /DMIT/i,
