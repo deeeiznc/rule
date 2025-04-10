@@ -1031,7 +1031,7 @@ function operator(proxies) {
   proxies = proxies.filter((proxy) => !nameclear.test(proxy.name));
   let geoi, i;
   return proxies.filter((proxy) => {
-    const pname = proxy.name;
+    let pname = proxy.name;
     for (geoi = 0; geoi < 190; geoi++) {
       if (pname.includes(flag[geoi])) break;
       if (pname.includes(en[geoi])) break;
@@ -1050,6 +1050,19 @@ function operator(proxies) {
     if (geoi == -1) return (proxy.name = FNAME + pname);
     else {
       let retainKeys = [];
+      if (BLKEY)
+        for (const k of BLKEY.split("+")) {
+          const part = k.split(">");
+          if (part[1]) {
+            if (pname.includes(part[0])) {
+              retainKeys.push(part[1]);
+              pname = pname.replace(part[0], "");
+            }
+          } else if (pname.includes(k)) {
+            retainKeys.push(k);
+            pname = pname.replace(k, "");
+          }
+        }
       for (i = 0; i < regexpUse.length; i++)
         if (regexpUse[i].test(pname)) retainKeys.push(valueUse[i]);
       for (i = 0; i < regexpLanding1.length; i++)
@@ -1088,13 +1101,6 @@ function operator(proxies) {
       for (i = 0; i < regexpEntryISP.length; i++)
         if (regexpEntryISP[i].test(pname) || regexpEntryISPb[i].test(pname))
           retainKeys.push(valueEntryISP[i]);
-      if (BLKEY)
-        for (const k of BLKEY.split("+")) {
-          const part = k.split(">");
-          if (part[1]) {
-            if (pname.includes(part[0])) retainKeys.push(part[1]);
-          } else if (pname.includes(k)) retainKeys.push(k);
-        }
       return (proxy.name = [
         flag[geoi],
         FNAME,
