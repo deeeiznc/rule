@@ -921,8 +921,8 @@ const regexpxUse = [
   valueLanding2 = ["CF"],
   regexpEntryRegion = [
     /深|SHENZHEN/i,
-    /广|GUANGZHOU/i,
-    /粤|GUANGDONG/i,
+    /广州|GUANGZHOU/i,
+    /广|粤|GUANGDONG/i,
     /上海|沪|SHANGHAI/i,
     /北京|京|BEIJING/i,
     /宁波|甬|NINGBO/i,
