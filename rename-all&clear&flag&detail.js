@@ -964,8 +964,8 @@ const regexpxUse = [
   ],
   valueEntryCloud2 = [
     "WCloud",
-    "UCloud",
     "QingCloud",
+    "UCloud",
     "Tencent",
     "Aliyun",
     "Volcano",
