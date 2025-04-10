@@ -942,6 +942,7 @@ const regexpxUse = [
   valueEntryCloud1 = ["OwOCloud"],
   regexpEntryCloud2 = [
     /唯一|唯云|WEIYI|WEIYUN|WCLOUD/i,
+    /青云|QINGYUN|QINGCLOUD/i,
     /优刻得|UCLOUD/i,
     /腾讯|TENCENT/i,
     /阿里|ALIBABA|ALIYUN|ALICLOUD/i,
@@ -952,6 +953,7 @@ const regexpxUse = [
   ],
   regexpEntryCloud2b = [
     /\bWY|WY\b/,
+    /\bQY|QY\b/,
     /\bUDPN|UDPN\b/,
     /\bTX|TX\b/,
     /\bAli|Ali\b/,
@@ -963,6 +965,7 @@ const regexpxUse = [
   valueEntryCloud2 = [
     "WCloud",
     "UCloud",
+    "QingCloud",
     "Tencent",
     "Aliyun",
     "Volcano",
