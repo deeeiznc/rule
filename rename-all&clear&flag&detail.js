@@ -946,7 +946,7 @@ const regexpxUse = [
     /优刻得|UCLOUD/i,
     /腾讯|TENCENT/i,
     /阿里|ALIBABA|ALIYUN|ALICLOUD/i,
-    /火山|VOLCANO|VOLCLOUD/i,
+    /火山|VOLCANO|VOLCENGINE|VOLCLOUD/i,
     /网易|NETEASE/i,
     /微软|MICROSOFT/i,
     /百度|BAIDU/i,
