@@ -922,7 +922,7 @@ const regexpxUse = [
   regexpEntryRegion = [
     /深|SHENZHEN/i,
     /广州|GUANGZHOU/i,
-    /广|粤|GUANGDONG/i,
+    /粤|GUANGDONG/i,
     /上海|沪|SHANGHAI/i,
     /北京|京|BEIJING/i,
     /宁波|甬|NINGBO/i,
@@ -931,7 +931,7 @@ const regexpxUse = [
   regexpEntryRegionb = [
     /\bSZ|SZ\b/,
     /\bGZ|GZ\b/,
-    /\bGD|GD\b/,
+    /\b广|\bGD|GD\b/,
     /\bSH|SH\b/,
     /\bBJ|BJ\b/,
     /\bNB|NB\b/,
